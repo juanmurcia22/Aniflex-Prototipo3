@@ -23,104 +23,123 @@ partial class FormListarEstudio
         filtrar = new Button();
         limpiar = new Button();
         grilla = new DataGridView();
-        colCodigo = new DataGridViewTextBoxColumn();
-        colNombre = new DataGridViewTextBoxColumn();
-        colPais = new DataGridViewTextBoxColumn();
-        colFecha = new DataGridViewTextBoxColumn();
-        DataGridViewCellStyle estiloFecha = new DataGridViewCellStyle();
-        estiloFecha.Format = "d";
-        colFecha.DefaultCellStyle = estiloFecha;
-        grilla.Columns.AddRange(new DataGridViewColumn[] { colCodigo, colNombre, colPais, colFecha });
         ((System.ComponentModel.ISupportInitialize)grilla).BeginInit();
         SuspendLayout();
-
+        // 
         // labelTitulo
-        labelTitulo.Name = "labelTitulo";
-        labelTitulo.Text = "LISTAR ESTUDIOS";
-        labelTitulo.AutoSize = true;
-        labelTitulo.Location = new Point(250, 16);
-        labelTitulo.Font = new Font("Showcard Gothic", 11F);
+        // 
         labelTitulo.Anchor = AnchorStyles.Top;
+        labelTitulo.AutoSize = true;
+        labelTitulo.Font = new Font("Showcard Gothic", 11F);
+        labelTitulo.Location = new Point(357, 27);
+        labelTitulo.Margin = new Padding(4, 0, 4, 0);
+        labelTitulo.Name = "labelTitulo";
+        labelTitulo.Size = new Size(191, 28);
+        labelTitulo.TabIndex = 0;
+        labelTitulo.Text = "LISTAR ESTUDIOS";
+        // 
         // labelBusqueda
-        labelBusqueda.Name = "labelBusqueda";
-        labelBusqueda.Text = "ID manual";
+        // 
         labelBusqueda.AutoSize = true;
-        labelBusqueda.Location = new Point(32, 65);
         labelBusqueda.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
+        labelBusqueda.Location = new Point(46, 108);
+        labelBusqueda.Margin = new Padding(4, 0, 4, 0);
+        labelBusqueda.Name = "labelBusqueda";
+        labelBusqueda.Size = new Size(33, 25);
+        labelBusqueda.TabIndex = 1;
+        labelBusqueda.Text = "ID";
+        // 
         // codigoBusqueda
-        codigoBusqueda.Name = "codigoBusqueda";
-        codigoBusqueda.Location = new Point(155, 61);
-        codigoBusqueda.Size = new Size(155, 23);
-        codigoBusqueda.Font = new Font("Times New Roman", 10F);
-        codigoBusqueda.ReadOnly = false;
+        // 
         codigoBusqueda.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        codigoBusqueda.Font = new Font("Times New Roman", 10F);
+        codigoBusqueda.Location = new Point(221, 102);
+        codigoBusqueda.Margin = new Padding(4, 5, 4, 5);
+        codigoBusqueda.Name = "codigoBusqueda";
+        codigoBusqueda.Size = new Size(220, 30);
+        codigoBusqueda.TabIndex = 2;
+        // 
         // labelPais
-        labelPais.Name = "labelPais";
-        labelPais.Text = "País";
+        // 
         labelPais.AutoSize = true;
-        labelPais.Location = new Point(330, 65);
         labelPais.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
+        labelPais.Location = new Point(471, 108);
+        labelPais.Margin = new Padding(4, 0, 4, 0);
+        labelPais.Name = "labelPais";
+        labelPais.Size = new Size(54, 25);
+        labelPais.TabIndex = 3;
+        labelPais.Text = "País";
+        // 
         // paisFiltro
-        paisFiltro.Name = "paisFiltro";
-        paisFiltro.Location = new Point(385, 61);
-        paisFiltro.Size = new Size(120, 23);
-        paisFiltro.Font = new Font("Times New Roman", 10F);
-        paisFiltro.ReadOnly = false;
+        // 
         paisFiltro.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+        paisFiltro.Font = new Font("Times New Roman", 10F);
+        paisFiltro.Location = new Point(550, 102);
+        paisFiltro.Margin = new Padding(4, 5, 4, 5);
+        paisFiltro.Name = "paisFiltro";
+        paisFiltro.Size = new Size(170, 30);
+        paisFiltro.TabIndex = 4;
+        // 
         // cargar
-        cargar.Name = "cargar";
-        cargar.Text = "Cargar";
-        cargar.Location = new Point(32, 102);
-        cargar.Size = new Size(110, 30);
+        // 
         cargar.Font = new Font("Sitka Banner", 10F);
+        cargar.Location = new Point(46, 170);
+        cargar.Margin = new Padding(4, 5, 4, 5);
+        cargar.Name = "cargar";
+        cargar.Size = new Size(157, 50);
+        cargar.TabIndex = 5;
+        cargar.Text = "Cargar";
         cargar.UseVisualStyleBackColor = true;
         cargar.Click += cargar_Click;
+        // 
         // filtrar
-        filtrar.Name = "filtrar";
-        filtrar.Text = "Filtrar";
-        filtrar.Location = new Point(160, 102);
-        filtrar.Size = new Size(110, 30);
+        // 
         filtrar.Font = new Font("Sitka Banner", 10F);
+        filtrar.Location = new Point(229, 170);
+        filtrar.Margin = new Padding(4, 5, 4, 5);
+        filtrar.Name = "filtrar";
+        filtrar.Size = new Size(157, 50);
+        filtrar.TabIndex = 6;
+        filtrar.Text = "Filtrar";
         filtrar.UseVisualStyleBackColor = true;
         filtrar.Click += filtrar_Click;
+        // 
         // limpiar
-        limpiar.Name = "limpiar";
-        limpiar.Text = "Limpiar";
-        limpiar.Location = new Point(288, 102);
-        limpiar.Size = new Size(110, 30);
+        // 
         limpiar.Font = new Font("Sitka Banner", 10F);
+        limpiar.Location = new Point(411, 170);
+        limpiar.Margin = new Padding(4, 5, 4, 5);
+        limpiar.Name = "limpiar";
+        limpiar.Size = new Size(157, 50);
+        limpiar.TabIndex = 7;
+        limpiar.Text = "Limpiar";
         limpiar.UseVisualStyleBackColor = true;
         limpiar.Click += limpiar_Click;
+        // 
         // grilla
-        grilla.Name = "grilla";
-        grilla.Location = new Point(32, 150);
-        grilla.Size = new Size(636, 280);
-        grilla.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        grilla.ReadOnly = true;
+        // 
         grilla.AllowUserToAddRows = false;
         grilla.AllowUserToDeleteRows = false;
-        grilla.AutoGenerateColumns = false;
+        grilla.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
         grilla.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        grilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        grilla.ColumnHeadersHeight = 34;
+        grilla.Location = new Point(46, 250);
+        grilla.Margin = new Padding(4, 5, 4, 5);
         grilla.MultiSelect = false;
+        grilla.Name = "grilla";
+        grilla.ReadOnly = true;
         grilla.RowHeadersVisible = false;
+        grilla.RowHeadersWidth = 62;
+        grilla.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        grilla.Size = new Size(909, 467);
+        grilla.TabIndex = 8;
         grilla.CellDoubleClick += grilla_CellDoubleClick;
-        // colCodigo
-        colCodigo.Name = "colCodigo";
-        colCodigo.DataPropertyName = "Codigo";
-        colCodigo.HeaderText = "ID manual";
-        // colNombre
-        colNombre.Name = "colNombre";
-        colNombre.DataPropertyName = "Nombre";
-        colNombre.HeaderText = "Nombre";
-        // colPais
-        colPais.Name = "colPais";
-        colPais.DataPropertyName = "PaisOrigen";
-        colPais.HeaderText = "País de origen";
-        // colFecha
-        colFecha.Name = "colFecha";
-        colFecha.DataPropertyName = "FechaFundacion";
-        colFecha.HeaderText = "Fundación";
+        // 
+        // FormListarEstudio
+        // 
+        AutoScaleDimensions = new SizeF(10F, 25F);
+        AutoScaleMode = AutoScaleMode.Font;
+        ClientSize = new Size(1000, 767);
         Controls.Add(labelTitulo);
         Controls.Add(labelBusqueda);
         Controls.Add(codigoBusqueda);
@@ -130,10 +149,8 @@ partial class FormListarEstudio
         Controls.Add(filtrar);
         Controls.Add(limpiar);
         Controls.Add(grilla);
-        AutoScaleDimensions = new SizeF(7F, 15F);
-        AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(700, 460);
-        MinimumSize = new Size(640, 499);
+        Margin = new Padding(4, 5, 4, 5);
+        MinimumSize = new Size(905, 794);
         Name = "FormListarEstudio";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Listar estudio";

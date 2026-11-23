@@ -1,4 +1,4 @@
-using Aniflex.Client.Controlador;
+﻿using Aniflex.Client.Controlador;
 using Aniflex.Client.Modelo;
 using Aniflex.Client.Servicios;
 using System;
@@ -24,7 +24,7 @@ namespace Aniflex.Client
         {
             try
             {
-                string id = txtId.Text.Trim();
+                string id = txtCodigo.Text.Trim();
 
 
                 if (string.IsNullOrEmpty(id))
