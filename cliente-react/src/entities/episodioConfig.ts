@@ -6,6 +6,7 @@ import type { EntityConfig, Raw } from './EntityConfig';
 // Atributos comunes a adicionar y actualizar (el id se agrega solo al actualizar)
 const datosEpisodio = (r: Raw) =>
   new EpisodioBuilder()
+    .codigo(texto(String(r.codigo), 'ID manual'))
     .serieId(texto(String(r.serieId), 'Serie'))
     .noEpisodio(entero(String(r.noEpisodio), 'Nº de episodio', 1))
     .titulo(texto(String(r.titulo), 'Título'))
@@ -16,7 +17,8 @@ const datosEpisodio = (r: Raw) =>
 export const episodioConfig: EntityConfig<Episodio> = {
   nombre: 'Episodio',
   campos: [
-    { key: 'id', label: 'ID', tipo: 'text', soloLecturaAlEditar: true, ocultoAlAdicionar: true },
+    { key: 'codigo', label: 'ID manual', tipo: 'text' },
+    { key: 'id', label: 'ObjectId', tipo: 'text', soloLecturaAlEditar: true, ocultoAlAdicionar: true },
     { key: 'serieId', label: 'Serie', tipo: 'serieRef', soloLecturaAlEditar: true },
     { key: 'noEpisodio', label: 'Nº de episodio', tipo: 'int' },
     { key: 'titulo', label: 'Título', tipo: 'text' },
@@ -25,8 +27,7 @@ export const episodioConfig: EntityConfig<Episodio> = {
     { key: 'esEspecial', label: 'Es especial', tipo: 'boolean' },
   ],
   camposBusqueda: [
-    { key: 'serieId', label: 'Serie', tipo: 'serieRef' },
-    { key: 'noEpisodio', label: 'Nº de episodio', tipo: 'int' },
+    { key: 'codigo', label: 'ID manual', tipo: 'text' },
   ],
   camposFiltro: [
     { key: 'serieId', label: 'Serie', tipo: 'serieRef' },

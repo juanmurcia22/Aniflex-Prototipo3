@@ -1,5 +1,6 @@
 export type Episodio = {
   id: string;
+  codigo: string;
   serieId: string;
   noEpisodio: number;
   titulo: string;
@@ -15,6 +16,7 @@ export type EpisodioNuevo = Omit<Episodio, 'id'>;
 export class EpisodioBuilder {
   private datos: Partial<Episodio> = {};
 
+  codigo(v: string) { this.datos.codigo = v; return this; }
   id(v: string) { this.datos.id = v; return this; }
   serieId(v: string) { this.datos.serieId = v; return this; }
   noEpisodio(v: number) { this.datos.noEpisodio = v; return this; }
@@ -32,7 +34,7 @@ export class EpisodioBuilder {
   /** Para ACTUALIZAR: el id es obligatorio. */
   build(exigirId = true): Episodio {
     const d = this.datos;
-    if ((exigirId && d.id === undefined) || d.serieId === undefined || d.noEpisodio === undefined ||
+    if ((exigirId && d.id === undefined) || d.codigo === undefined || d.serieId === undefined || d.noEpisodio === undefined ||
         d.titulo === undefined || d.calificacion === undefined ||
         d.fechaEmision === undefined || d.esEspecial === undefined) {
       throw new Error('Faltan atributos para construir el Episodio.');

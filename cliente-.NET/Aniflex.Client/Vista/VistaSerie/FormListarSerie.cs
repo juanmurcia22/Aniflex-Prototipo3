@@ -1,4 +1,4 @@
-﻿using Aniflex.Client.Controlador;
+using Aniflex.Client.Controlador;
 using Aniflex.Client.Modelo;
 using Aniflex.Client.Servicios;
 using System;
@@ -9,6 +9,7 @@ namespace Aniflex.Client
 {
     public partial class FormListarSerie : Form
     {
+        private bool listadoCargado;
         private readonly ServicioSerie _service = ServicioSerie.GetInstance();
 
         public FormListarSerie()
@@ -19,9 +20,27 @@ namespace Aniflex.Client
             SerieObserver.OnSeriesCambiadas += RefrescarGrilla;
         }
 
-        private async void FormListar_Load(object sender, EventArgs e)
+        private async void btnCargar_Click(object? sender, EventArgs e)
         {
+            txtTituloContiene.Clear();
+            textCalificacionMin.Clear();
             await CargarSeries();
+        }
+
+        private void verEstudios_Click(object? sender, EventArgs e)
+        {
+            if (dgvSeries.CurrentRow?.DataBoundItem is not Serie serie)
+            {
+                MessageBox.Show("Selecciona una serie del listado.");
+                return;
+            }
+            new Vista.VistaEstudio.FormListarEstudio(serie.Id) {
+                Text = $"Estudios de {serie.Titulo}"
+            }.Show(this);
+        }
+
+        private void FormListar_Load(object sender, EventArgs e)
+        {
         }
 
         private async void buttonFiltrar_Click(object sender, EventArgs e)
@@ -60,6 +79,7 @@ namespace Aniflex.Client
 
                 dgvSeries.DataSource = null;
                 dgvSeries.DataSource = series;
+                listadoCargado = true;
             }
             catch (Exception ex)
             {
@@ -71,7 +91,7 @@ namespace Aniflex.Client
         private async void RefrescarGrilla()
         {
             // Método que invoca el Observer cuando ocurre una modificación
-            await CargarSeries();
+            if (listadoCargado) await CargarSeries();
         }
 
         private void FormListar_FormClosed(object sender, FormClosedEventArgs e)
@@ -85,13 +105,13 @@ namespace Aniflex.Client
 
         }
 
-        private async void buttonLimpiar_Click_1(object sender, EventArgs e)
+        private void buttonLimpiar_Click_1(object sender, EventArgs e)
         {
             txtTituloContiene.Clear();
             textCalificacionMin.Clear();
 
-            await CargarSeries();
+            dgvSeries.DataSource = null;
+            listadoCargado = false;
         }
     }
 }
-

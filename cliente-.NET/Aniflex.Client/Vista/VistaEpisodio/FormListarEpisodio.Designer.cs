@@ -37,6 +37,7 @@
             cmbSerie = new ComboBox();
             label8 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvEpisodios).BeginInit();
+            cargarTodo = new Button();
             SuspendLayout();
             // 
             // buttonLimpiar
@@ -70,7 +71,7 @@
             btnCargar.Name = "btnCargar";
             btnCargar.Size = new Size(135, 27);
             btnCargar.TabIndex = 39;
-            btnCargar.Text = "Cargar Episodios";
+            btnCargar.Text = "Filtrar";
             btnCargar.UseVisualStyleBackColor = true;
             btnCargar.Click += btnCargar_Click;
             // 
@@ -125,9 +126,16 @@
             // 
             // FormListarEpisodio
             // 
+            cargarTodo.Name = "cargarTodo";
+            cargarTodo.Text = "Cargar";
+            cargarTodo.Location = new Point(401, 30);
+            cargarTodo.Size = new Size(135, 27);
+            cargarTodo.Font = new Font("Sitka Banner", 10F);
+            cargarTodo.Click += cargarTodo_Click;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(562, 376);
+            Controls.Add(cargarTodo);
             Controls.Add(cmbSerie);
             Controls.Add(label8);
             Controls.Add(buttonLimpiar);
@@ -154,5 +162,7 @@
         private Label label4;
         private ComboBox cmbSerie;
         private Label label8;
+        private Button cargarTodo;
+
     }
 }

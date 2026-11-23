@@ -3,7 +3,7 @@ import { sinVacios } from '../utils/parseo';
 import { GraphQLClient } from './GraphQLClient';
 import type { ICrudService, Params } from './ICrudService';
 
-const CAMPOS = 'id titulo temporadas calificacion fechaEstreno enEmision';
+const CAMPOS = 'id codigo titulo temporadas calificacion fechaEstreno enEmision';
 
 export class SerieService implements ICrudService<Serie> {
   constructor(private readonly gql: GraphQLClient = GraphQLClient.getInstance()) {}
@@ -15,6 +15,12 @@ export class SerieService implements ICrudService<Serie> {
   }
 
   async buscar(p: Params): Promise<Serie | null> {
+    const { codigo } = sinVacios(p);
+    if (codigo) {
+      const resultado = await this.gql.request<{ buscarSerie: Serie | null }>(
+        `query($codigo: String!) { buscarSerie: buscarSeriePorCodigo(codigo: $codigo) { ${CAMPOS} } }`, { codigo });
+      return resultado.buscarSerie;
+    }
     const { id, titulo } = sinVacios(p);
     if (!id && !titulo) throw new Error('Ingrese al menos el ID o el título de la serie.');
     const d = await this.gql.request<{ buscarSerie: Serie | null }>(

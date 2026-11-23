@@ -1,5 +1,6 @@
 export type Serie = {
   id: string;
+  codigo: string;
   titulo: string;
   temporadas: number;
   calificacion: number;
@@ -14,6 +15,7 @@ export type SerieNueva = Omit<Serie, 'id'>;
 export class SerieBuilder {
   private datos: Partial<Serie> = {};
 
+  codigo(v: string) { this.datos.codigo = v; return this; }
   id(v: string) { this.datos.id = v; return this; }
   titulo(v: string) { this.datos.titulo = v; return this; }
   temporadas(v: number) { this.datos.temporadas = v; return this; }
@@ -30,7 +32,7 @@ export class SerieBuilder {
   /** Para ACTUALIZAR: el id es obligatorio. */
   build(exigirId = true): Serie {
     const d = this.datos;
-    if ((exigirId && d.id === undefined) || d.titulo === undefined || d.temporadas === undefined ||
+    if ((exigirId && d.id === undefined) || d.codigo === undefined || d.titulo === undefined || d.temporadas === undefined ||
         d.calificacion === undefined || d.fechaEstreno === undefined || d.enEmision === undefined) {
       throw new Error('Faltan atributos para construir la Serie.');
     }

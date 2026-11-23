@@ -24,7 +24,12 @@ public class ServicioEpisodio {
         this.series = series;
     }
 
-    /** El id (ObjectId) lo genera MongoDB al insertar, por eso ya no hay validación de ID duplicado. */
+    /** El ObjectId es automático; MongoDB valida la unicidad del ID manual. */
+    public Optional<Episodio> buscarPorCodigo(String codigo) {
+        if (codigo == null || codigo.isBlank()) throw new IllegalArgumentException("Ingresa el ID manual.");
+        return episodios.findByCodigo(codigo.trim().toUpperCase(java.util.Locale.ROOT));
+    }
+
     public Episodio adicionar(Episodio episodio) {
         validarRelacion(episodio);
         Episodio guardado = episodios.insert(episodio);

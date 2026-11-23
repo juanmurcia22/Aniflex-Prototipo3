@@ -1,4 +1,4 @@
-﻿namespace Aniflex.Client
+namespace Aniflex.Client
 {
     partial class FormAgregarSerie
     {
@@ -39,6 +39,8 @@
             btnGuardar = new Button();
             label6 = new Label();
             dateTimePickerEstreno = new DateTimePicker();
+            txtCodigo = new TextBox();
+            labelIdManual = new Label();
             SuspendLayout();
             // 
             // label1
@@ -153,14 +155,28 @@
             dateTimePickerEstreno.Format = DateTimePickerFormat.Custom;
             dateTimePickerEstreno.Location = new Point(197, 203);
             dateTimePickerEstreno.Name = "dateTimePickerEstreno";
+            dateTimePickerEstreno.CustomFormat = "yyyy-MM-dd HH:mm";
             dateTimePickerEstreno.Size = new Size(181, 23);
             dateTimePickerEstreno.TabIndex = 12;
             // 
             // FormAgregarSerie
             // 
+            txtCodigo.Name = "txtCodigo";
+            txtCodigo.Font = new Font("Times New Roman", 10F);
+            txtCodigo.Location = new Point(198, 51);
+            txtCodigo.Size = new Size(180, 23);
+            txtCodigo.TabIndex = 2;
+            labelIdManual.Name = "labelIdManual";
+            labelIdManual.Text = "ID manual:";
+            labelIdManual.AutoSize = true;
+            labelIdManual.Location = new Point(52, 55);
+            labelIdManual.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
+            labelIdManual.TabIndex = 1;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(434, 325);
+            Controls.Add(labelIdManual);
+            Controls.Add(txtCodigo);
             Controls.Add(dateTimePickerEstreno);
             Controls.Add(label6);
             Controls.Add(btnGuardar);
@@ -193,5 +209,9 @@
         private Button btnGuardar;
         private Label label6;
         private DateTimePicker dateTimePickerEstreno;
+        private TextBox txtCodigo;
+
+        private Label labelIdManual;
+
     }
 }

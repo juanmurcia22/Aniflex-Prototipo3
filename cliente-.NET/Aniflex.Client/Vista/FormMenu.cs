@@ -1,3 +1,4 @@
+using Aniflex.Client.Vista.VistaEstudio;
 using Aniflex.Client.Vista.VistaEpisodio;
 
 namespace Aniflex.Client
@@ -7,6 +8,31 @@ namespace Aniflex.Client
         public FormMenu()
         {
             InitializeComponent();
+        }
+
+        private void listarEstudio_Click(object? sender, EventArgs e)
+        {
+            new FormListarEstudio().Show();
+        }
+
+        private void agregarEstudio_Click(object? sender, EventArgs e)
+        {
+            new FormAgregarEstudio().Show();
+        }
+
+        private void buscarEstudio_Click(object? sender, EventArgs e)
+        {
+            new FormBuscarEstudio().Show();
+        }
+
+        private void actualizarEstudio_Click(object? sender, EventArgs e)
+        {
+            new FormActualizarEstudio().Show();
+        }
+
+        private void eliminarEstudio_Click(object? sender, EventArgs e)
+        {
+            new FormEliminarEstudio().Show();
         }
 
         private void listarTodoToolStripMenuItem_Click(object sender, EventArgs e)

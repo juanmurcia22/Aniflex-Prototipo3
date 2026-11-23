@@ -1,4 +1,4 @@
-﻿using Aniflex.Client.Controlador;
+using Aniflex.Client.Controlador;
 using Aniflex.Client.Modelo;
 using Aniflex.Client.Servicios;
 using System;
@@ -19,12 +19,11 @@ namespace Aniflex.Client
         public FormAgregarSerie()
         {
             InitializeComponent();
-            dateTimePickerEstreno.Format = DateTimePickerFormat.Custom;
-            dateTimePickerEstreno.CustomFormat = "yyyy-MM-dd HH:mm";
         }
 
         private void LimpiarCampos()
         {
+            txtCodigo.Clear();
             txtTitulo.Clear();
             txtTemporadas.Clear();
             txtCalificacion.Clear();
@@ -35,6 +34,11 @@ namespace Aniflex.Client
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(txtCodigo.Text))
+                {
+                    MessageBox.Show("Ingresa el ID manual.");
+                    return;
+                }
                 // 1. Lectura y casteo de datos desde los controles de la UI
                 string titulo = txtTitulo.Text.Trim();
 
@@ -63,6 +67,7 @@ namespace Aniflex.Client
 
                 Serie nuevaSerie = new Serie
                 {
+                    Codigo = txtCodigo.Text.Trim(),
                     Titulo = titulo,
                     Temporadas = temporadas,
                     Calificacion = calificacion,

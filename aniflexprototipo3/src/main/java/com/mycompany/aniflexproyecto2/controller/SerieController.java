@@ -24,6 +24,11 @@ public class SerieController {
     }
 
     @QueryMapping
+    public Serie buscarSeriePorCodigo(@Argument String codigo) {
+        return servicio.buscarPorCodigo(codigo).orElse(null);
+    }
+
+    @QueryMapping
     public Serie buscarSerie(@Argument String id, @Argument String titulo) {
         return servicio.buscar(id, titulo).orElse(null);   // null => "no existe" para el cliente
     }

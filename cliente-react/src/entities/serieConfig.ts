@@ -6,6 +6,7 @@ import type { EntityConfig, Raw } from './EntityConfig';
 // Atributos comunes a adicionar y actualizar (el id se agrega solo al actualizar)
 const datosSerie = (r: Raw) =>
   new SerieBuilder()
+    .codigo(texto(String(r.codigo), 'ID manual'))
     .titulo(texto(String(r.titulo), 'Título'))
     .temporadas(entero(String(r.temporadas), 'Temporadas', 1))
     .calificacion(decimal(String(r.calificacion), 'Calificación', 0, 10))
@@ -15,7 +16,8 @@ const datosSerie = (r: Raw) =>
 export const serieConfig: EntityConfig<Serie> = {
   nombre: 'Serie',
   campos: [
-    { key: 'id', label: 'ID', tipo: 'text', soloLecturaAlEditar: true, ocultoAlAdicionar: true },
+    { key: 'codigo', label: 'ID manual', tipo: 'text' },
+    { key: 'id', label: 'ObjectId', tipo: 'text', soloLecturaAlEditar: true, ocultoAlAdicionar: true },
     { key: 'titulo', label: 'Título', tipo: 'text' },
     { key: 'temporadas', label: 'Temporadas', tipo: 'int' },
     { key: 'calificacion', label: 'Calificación (0-10)', tipo: 'float' },
@@ -23,8 +25,7 @@ export const serieConfig: EntityConfig<Serie> = {
     { key: 'enEmision', label: 'En emisión', tipo: 'boolean' },
   ],
   camposBusqueda: [
-    { key: 'id', label: 'ID', tipo: 'text' },
-    { key: 'titulo', label: 'Título (exacto)', tipo: 'text' },
+    { key: 'codigo', label: 'ID manual', tipo: 'text' },
   ],
   camposFiltro: [
     { key: 'titulo', label: 'Título contiene', tipo: 'text' },

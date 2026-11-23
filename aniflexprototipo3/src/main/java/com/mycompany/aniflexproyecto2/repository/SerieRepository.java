@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface SerieRepository extends MongoRepository<Serie, String> {
 
+    Optional<Serie> findByCodigo(String codigo);
+
     Optional<Serie> findByTituloIgnoreCase(String titulo);
 
     List<Serie> findByTituloContainingIgnoreCase(String titulo);

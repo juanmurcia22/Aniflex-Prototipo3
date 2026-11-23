@@ -1,4 +1,4 @@
-﻿namespace Aniflex.Client
+namespace Aniflex.Client
 {
     partial class FormActualizarSerie
     {
@@ -44,8 +44,8 @@
             label6 = new Label();
             textBoxID = new TextBox();
             label5 = new Label();
-            txtTituloBuscar = new TextBox();
-            label7 = new Label();
+            txtCodigo = new TextBox();
+            labelIdManual = new Label();
             SuspendLayout();
             // 
             // txtCalificacion
@@ -158,7 +158,7 @@
             txtIdBuscar.Name = "txtIdBuscar";
             txtIdBuscar.Size = new Size(94, 17);
             txtIdBuscar.TabIndex = 11;
-            txtIdBuscar.Text = "ID (opcional):";
+            txtIdBuscar.Text = "ID manual:";
             // 
             // btnActualizar
             // 
@@ -208,37 +208,26 @@
             label5.Name = "label5";
             label5.Size = new Size(28, 17);
             label5.TabIndex = 25;
-            label5.Text = "ID:";
+            label5.Text = "ObjectId:";
             label5.Click += label5_Click;
-            // 
-            // txtTituloBuscar
-            // 
-            txtTituloBuscar.Location = new Point(195, 108);
-            txtTituloBuscar.Margin = new Padding(2);
-            txtTituloBuscar.Multiline = true;
-            txtTituloBuscar.Name = "txtTituloBuscar";
-            txtTituloBuscar.Size = new Size(160, 22);
-            txtTituloBuscar.TabIndex = 28;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.Location = new Point(49, 114);
-            label7.Margin = new Padding(2, 0, 2, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(49, 17);
-            label7.TabIndex = 27;
-            label7.Text = "Titulo";
-            label7.Click += label7_Click;
             // 
             // FormActualizarSerie
             // 
+            txtCodigo.Name = "txtCodigo";
+            txtCodigo.Location = new Point(195, 108);
+            txtCodigo.Size = new Size(160, 22);
+            txtCodigo.Font = new Font("Times New Roman", 10F);
+            txtCodigo.TabIndex = 14;
+            labelIdManual.Name = "labelIdManual";
+            labelIdManual.Text = "ID manual:";
+            labelIdManual.AutoSize = true;
+            labelIdManual.Location = new Point(49, 112);
+            labelIdManual.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(413, 489);
-            Controls.Add(txtTituloBuscar);
-            Controls.Add(label7);
+            Controls.Add(labelIdManual);
+            Controls.Add(txtCodigo);
             Controls.Add(textBoxID);
             Controls.Add(label5);
             Controls.Add(dateTimePickerEstreno);
@@ -282,7 +271,9 @@
         private Label label6;
         private TextBox textBoxID;
         private Label label5;
-        private TextBox txtTituloBuscar;
-        private Label label7;
+        private TextBox txtCodigo;
+
+        private Label labelIdManual;
+
     }
 }

@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface EpisodioRepository extends MongoRepository<Episodio, String> {
 
+    Optional<Episodio> findByCodigo(String codigo);
+
     Optional<Episodio> findBySerieIdAndNoEpisodio(String serieId, int noEpisodio);
 
     List<Episodio> findBySerieId(String serieId);

@@ -6,6 +6,11 @@ import com.mycompany.aniflexproyecto2.model.SerieConEpisodios;
 import com.mycompany.aniflexproyecto2.repository.EpisodioRepository;
 import com.mycompany.aniflexproyecto2.repository.SerieRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Update;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -19,15 +24,24 @@ import java.util.Optional;
 public class ServicioSerie {
 
     private final SerieRepository series;
+    private final MongoTemplate mongo;
+    private final ServicioEstudioRest estudios;
     private final EpisodioRepository episodios;
     private final PublicadorCambios publicador = PublicadorCambios.getInstance();
 
-    public ServicioSerie(SerieRepository series, EpisodioRepository episodios) {
+    public ServicioSerie(SerieRepository series, EpisodioRepository episodios, ServicioEstudioRest estudios, MongoTemplate mongo) {
+        this.mongo = mongo;
+        this.estudios = estudios;
         this.series = series;
         this.episodios = episodios;
     }
 
-    /** El id (ObjectId) lo genera MongoDB al insertar, por eso ya no hay validación de ID duplicado. */
+    /** El ObjectId es automático; MongoDB valida la unicidad del ID manual. */
+    public Optional<Serie> buscarPorCodigo(String codigo) {
+        if (codigo == null || codigo.isBlank()) throw new IllegalArgumentException("Ingresa el ID manual.");
+        return series.findByCodigo(codigo.trim().toUpperCase(java.util.Locale.ROOT));
+    }
+
     public Serie adicionar(Serie serie) {
         Serie guardada = series.insert(serie);
         publicador.notificar("Serie", "ADICIONADA", guardada.getId());
@@ -59,7 +73,13 @@ public class ServicioSerie {
         if (!series.existsById(serie.getId())) {
             throw new IllegalArgumentException("No existe una serie con el ID " + serie.getId());
         }
-        Serie guardada = series.save(serie);
+        // Actualiza solo los datos editables para conservar estudioId, incluso con asociaciones concurrentes.
+        var cambios = new Update().set("codigo", serie.getCodigo()).set("titulo", serie.getTitulo())
+                .set("temporadas", serie.getTemporadas()).set("calificacion", serie.getCalificacion())
+                .set("fechaEstreno", serie.getFechaEstreno()).set("enEmision", serie.isEnEmision());
+        Serie guardada = mongo.findAndModify(Query.query(Criteria.where("id").is(serie.getId())), cambios,
+                FindAndModifyOptions.options().returnNew(true), Serie.class);
+        if (guardada == null) throw new IllegalArgumentException("La serie ya no existe.");
         publicador.notificar("Serie", "ACTUALIZADA", guardada.getId());
         return guardada;
     }
@@ -70,8 +90,8 @@ public class ServicioSerie {
         if (!series.existsById(limpio)) {
             return false;
         }
-        episodios.deleteBySerieId(limpio);
-        series.deleteById(limpio);
+        // REST coordina las asociaciones y la baja con las escrituras de estudios.
+        if (!estudios.eliminarSerie(limpio)) return false;
         publicador.notificar("Serie", "ELIMINADA", limpio);
         return true;
     }

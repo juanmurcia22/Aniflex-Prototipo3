@@ -30,8 +30,6 @@
         {
             txtNumEpisodio = new TextBox();
             label9 = new Label();
-            cmbSerie = new ComboBox();
-            label8 = new Label();
             txtNumEliminar = new TextBox();
             label7 = new Label();
             textBoxID = new TextBox();
@@ -70,26 +68,6 @@
             label9.TabIndex = 79;
             label9.Text = "N° Episodio:";
             // 
-            // cmbSerie
-            // 
-            cmbSerie.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbSerie.FormattingEnabled = true;
-            cmbSerie.Location = new Point(164, 78);
-            cmbSerie.Name = "cmbSerie";
-            cmbSerie.Size = new Size(163, 23);
-            cmbSerie.TabIndex = 78;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(24, 78);
-            label8.Margin = new Padding(2, 0, 2, 0);
-            label8.Name = "label8";
-            label8.Size = new Size(51, 17);
-            label8.TabIndex = 77;
-            label8.Text = "Serie:";
-            // 
             // txtNumEliminar
             // 
             txtNumEliminar.Location = new Point(164, 114);
@@ -107,7 +85,8 @@
             label7.Name = "label7";
             label7.Size = new Size(92, 17);
             label7.TabIndex = 75;
-            label7.Text = "Nº Episodio";
+
+            label7.Text = "ID manual:";
             // 
             // textBoxID
             // 
@@ -127,14 +106,16 @@
             label5.Name = "label5";
             label5.Size = new Size(28, 17);
             label5.TabIndex = 73;
-            label5.Text = "ID:";
+
+            label5.Text = "ID manual:";
             // 
             // dateTimePickerEstreno
             // 
             dateTimePickerEstreno.Enabled = false;
-            dateTimePickerEstreno.Format = DateTimePickerFormat.Short;
+            dateTimePickerEstreno.Format = DateTimePickerFormat.Custom;
             dateTimePickerEstreno.Location = new Point(164, 413);
             dateTimePickerEstreno.Name = "dateTimePickerEstreno";
+            dateTimePickerEstreno.CustomFormat = "yyyy-MM-dd HH:mm";
             dateTimePickerEstreno.Size = new Size(163, 23);
             dateTimePickerEstreno.TabIndex = 72;
             // 
@@ -254,8 +235,6 @@
             Controls.Add(txtSerie);
             Controls.Add(txtNumEpisodio);
             Controls.Add(label9);
-            Controls.Add(cmbSerie);
-            Controls.Add(label8);
             Controls.Add(txtNumEliminar);
             Controls.Add(label7);
             Controls.Add(textBoxID);
@@ -271,7 +250,6 @@
             Controls.Add(label1);
             Name = "FormBuscarEpisodio";
             Text = "FormBuscarEpisodio";
-            Load += FormBuscarEpisodio_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -280,8 +258,6 @@
 
         private TextBox txtNumEpisodio;
         private Label label9;
-        private ComboBox cmbSerie;
-        private Label label8;
         private TextBox txtNumEliminar;
         private Label label7;
         private TextBox textBoxID;

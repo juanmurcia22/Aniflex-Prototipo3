@@ -14,6 +14,7 @@ namespace Aniflex.Client.Vista.VistaEpisodio
 {
     public partial class FormListarEpisodio : Form
     {
+        private bool listadoCargado;
         private readonly ServicioEpisodio _service = ServicioEpisodio.GetInstance();
         private readonly ServicioSerie _serviceSerie = ServicioSerie.GetInstance();
 
@@ -21,7 +22,6 @@ namespace Aniflex.Client.Vista.VistaEpisodio
         {
             InitializeComponent();
 
-            cmbSerie.DropDownStyle = ComboBoxStyle.DropDownList;
 
             // Suscripción al Observer
             EpisodioObserver.OnEpisodiosCambiados += RefrescarGrilla;
@@ -29,10 +29,16 @@ namespace Aniflex.Client.Vista.VistaEpisodio
             Load += FormListarEpisodio_Load_1;
         }
 
-        private async void FormListarEpisodio_Load_1(object sender, EventArgs e)
+        private async void cargarTodo_Click(object? sender, EventArgs e)
         {
+            txtTituloContiene.Clear();
             await CargarSeriesAsync();
+            cmbSerie.SelectedIndex = -1;
             await CargarEpisodios();
+        }
+
+        private void FormListarEpisodio_Load_1(object sender, EventArgs e)
+        {
         }
         private async Task CargarSeriesAsync()
         {
@@ -64,6 +70,7 @@ namespace Aniflex.Client.Vista.VistaEpisodio
 
                 dgvEpisodios.DataSource = null;
                 dgvEpisodios.DataSource = episodios;
+                listadoCargado = true;
             }
             catch (Exception ex)
             {
@@ -74,7 +81,7 @@ namespace Aniflex.Client.Vista.VistaEpisodio
         private async void RefrescarGrilla()
         {
             // Lo invoca el Observer cuando se adiciona, actualiza o elimina un episodio
-            await CargarEpisodios();
+            if (listadoCargado) await CargarEpisodios();
         }
 
         private void FormListarEpisodio_FormClosed(object sender, FormClosedEventArgs e)
@@ -88,12 +95,13 @@ namespace Aniflex.Client.Vista.VistaEpisodio
             await CargarEpisodios();
         }
 
-        private async void buttonLimpiar_Click(object sender, EventArgs e)
+        private void buttonLimpiar_Click(object sender, EventArgs e)
         {
             txtTituloContiene.Clear();
             cmbSerie.SelectedIndex = -1;
 
-            await CargarEpisodios();
+            dgvEpisodios.DataSource = null;
+            listadoCargado = false;
         }
     }
 }

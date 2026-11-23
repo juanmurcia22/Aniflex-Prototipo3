@@ -1,4 +1,4 @@
-﻿namespace Aniflex.Client
+namespace Aniflex.Client
 {
     partial class FormMenu
     {
@@ -47,12 +47,18 @@
             acercaDeToolStripMenuItem = new ToolStripMenuItem();
             label1 = new Label();
             menuStrip1.SuspendLayout();
+            estudiosToolStripMenuItem = new ToolStripMenuItem();
+            listarEstudioToolStripMenuItem = new ToolStripMenuItem();
+            agregarEstudioToolStripMenuItem = new ToolStripMenuItem();
+            buscarEstudioToolStripMenuItem = new ToolStripMenuItem();
+            actualizarEstudioToolStripMenuItem = new ToolStripMenuItem();
+            eliminarEstudioToolStripMenuItem = new ToolStripMenuItem();
             SuspendLayout();
             // 
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(24, 24);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { archivoToolStripMenuItem, películasToolStripMenuItem, toolStripMenuItemEpisodios, ayudaToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { archivoToolStripMenuItem, películasToolStripMenuItem, toolStripMenuItemEpisodios, estudiosToolStripMenuItem, ayudaToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(4, 1, 0, 1);
@@ -183,6 +189,24 @@
             // 
             // FormMenu
             // 
+            estudiosToolStripMenuItem.Name = "estudiosToolStripMenuItem";
+            estudiosToolStripMenuItem.Text = "Estudios";
+            estudiosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { listarEstudioToolStripMenuItem, agregarEstudioToolStripMenuItem, buscarEstudioToolStripMenuItem, actualizarEstudioToolStripMenuItem, eliminarEstudioToolStripMenuItem });
+            listarEstudioToolStripMenuItem.Name = "listarEstudioToolStripMenuItem";
+            listarEstudioToolStripMenuItem.Text = "Listar";
+            listarEstudioToolStripMenuItem.Click += listarEstudio_Click;
+            agregarEstudioToolStripMenuItem.Name = "agregarEstudioToolStripMenuItem";
+            agregarEstudioToolStripMenuItem.Text = "Agregar";
+            agregarEstudioToolStripMenuItem.Click += agregarEstudio_Click;
+            buscarEstudioToolStripMenuItem.Name = "buscarEstudioToolStripMenuItem";
+            buscarEstudioToolStripMenuItem.Text = "Buscar";
+            buscarEstudioToolStripMenuItem.Click += buscarEstudio_Click;
+            actualizarEstudioToolStripMenuItem.Name = "actualizarEstudioToolStripMenuItem";
+            actualizarEstudioToolStripMenuItem.Text = "Actualizar";
+            actualizarEstudioToolStripMenuItem.Click += actualizarEstudio_Click;
+            eliminarEstudioToolStripMenuItem.Name = "eliminarEstudioToolStripMenuItem";
+            eliminarEstudioToolStripMenuItem.Text = "Eliminar";
+            eliminarEstudioToolStripMenuItem.Click += eliminarEstudio_Click;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(600, 270);
@@ -219,5 +243,17 @@
         private ToolStripMenuItem toolStripMenuItem6;
         private ToolStripMenuItem archivoToolStripMenuItem;
         private ToolStripMenuItem salirToolStripMenuItem;
+        private ToolStripMenuItem estudiosToolStripMenuItem;
+
+        private ToolStripMenuItem listarEstudioToolStripMenuItem;
+
+        private ToolStripMenuItem agregarEstudioToolStripMenuItem;
+
+        private ToolStripMenuItem buscarEstudioToolStripMenuItem;
+
+        private ToolStripMenuItem actualizarEstudioToolStripMenuItem;
+
+        private ToolStripMenuItem eliminarEstudioToolStripMenuItem;
+
     }
 }

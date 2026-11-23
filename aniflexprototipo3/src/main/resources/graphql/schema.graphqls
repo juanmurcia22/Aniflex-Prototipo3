@@ -1,6 +1,9 @@
 # Las fechas (LocalDateTime) viajan como String ISO-8601: "2024-05-01T20:30:00".
 
 type Serie {
+    estudioId: ID
+    codigo: String!
+    estudios: [Estudio!]!
     id: ID!
     titulo: String!
     temporadas: Int!
@@ -10,6 +13,7 @@ type Serie {
 }
 
 type Episodio {
+    codigo: String!
     id: ID!
     serieId: ID!
     noEpisodio: Int!
@@ -42,6 +46,7 @@ type SerieConEpisodios {
 
 "El id es opcional: al adicionar se ignora (MongoDB genera el ObjectId); al actualizar es obligatorio."
 input SerieInput {
+    codigo: String!
     id: ID
     titulo: String!
     temporadas: Int!
@@ -52,6 +57,7 @@ input SerieInput {
 
 "El id es opcional: al adicionar se ignora (MongoDB genera el ObjectId); al actualizar es obligatorio."
 input EpisodioInput {
+    codigo: String!
     id: ID
     serieId: ID!
     noEpisodio: Int!
@@ -62,6 +68,10 @@ input EpisodioInput {
 }
 
 type Query {
+    buscarSeriePorCodigo(codigo: String!): Serie
+    buscarEpisodioPorCodigo(codigo: String!): Episodio
+    buscarEstudio(codigo: String!): Estudio
+    listarEstudios(codigo: String, paisOrigen: String, serieId: ID): [Estudio!]!
     "Consulta individual por uno o dos parámetros (si llegan ambos, deben coincidir ambos)."
     buscarSerie(id: ID, titulo: String): Serie
     "Todas las series; filtros opcionales aplicados en el servidor."
@@ -77,6 +87,9 @@ type Query {
 }
 
 type Mutation {
+    adicionarEstudio(input: EstudioInput!): Estudio!
+    actualizarEstudio(input: EstudioInput!): Estudio!
+    eliminarEstudio(id: ID!): Boolean!
     adicionarSerie(input: SerieInput!): Serie!
     actualizarSerie(input: SerieInput!): Serie!
     eliminarSerie(id: ID!): Boolean!
@@ -84,4 +97,23 @@ type Mutation {
     adicionarEpisodio(input: EpisodioInput!): Episodio!
     actualizarEpisodio(input: EpisodioInput!): Episodio!
     eliminarEpisodio(id: ID!): Boolean!
+}
+
+type Estudio {
+    id: ID!
+    codigo: String!
+    nombre: String!
+    paisOrigen: String!
+    fechaFundacion: String!
+    seriesIds: [ID!]!
+    series: [Serie!]!
+}
+
+input EstudioInput {
+    id: ID
+    codigo: String!
+    nombre: String!
+    paisOrigen: String!
+    fechaFundacion: String!
+    seriesIds: [ID!]!
 }

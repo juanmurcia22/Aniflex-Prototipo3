@@ -1,4 +1,4 @@
-﻿using Aniflex.Client.Controlador;
+using Aniflex.Client.Controlador;
 using Aniflex.Client.Modelo;
 using GraphQL;
 using Newtonsoft.Json;
@@ -12,7 +12,7 @@ namespace Aniflex.Client.Servicios
         private ServicioSerie() { }
         public static ServicioSerie GetInstance() => _instancia;
         private const string Campos =
-            "id titulo temporadas calificacion fechaEstreno enEmision";
+            "id codigo estudioId titulo temporadas calificacion fechaEstreno enEmision";
 
         public async Task<List<Serie>> ListarAsync(string titulo = null, double? calificacionMinima = null)
         {
@@ -42,6 +42,18 @@ namespace Aniflex.Client.Servicios
             var r = await GraphQLConexion.Cliente.SendQueryAsync<BuscarResponse>(request);
             GraphQLConexion.VerificarErrores(r);
             return r.Data?.BuscarSerie;
+        }
+
+        public async Task<Serie> BuscarPorCodigoAsync(string codigo)
+        {
+            var request = new GraphQLRequest
+            {
+                Query = "query($codigo: String!) { buscarSerie: buscarSeriePorCodigo(codigo: $codigo) { " + Campos + " } }",
+                Variables = new { codigo }
+            };
+            var respuesta = await GraphQLConexion.Cliente.SendQueryAsync<BuscarResponse>(request);
+            GraphQLConexion.VerificarErrores(respuesta);
+            return respuesta.Data?.BuscarSerie;
         }
 
         public async Task<Serie> AdicionarAsync(Serie s)
@@ -89,6 +101,7 @@ namespace Aniflex.Client.Servicios
         private static object AInput(Serie s, string? id) => new
         {
             id,
+            codigo = s.Codigo,
             titulo = s.Titulo,
             temporadas = s.Temporadas,
             calificacion = s.Calificacion,

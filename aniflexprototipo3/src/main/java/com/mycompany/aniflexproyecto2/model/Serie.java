@@ -3,6 +3,8 @@ package com.mycompany.aniflexproyecto2.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +20,10 @@ public final class Serie {
 
     @Id
     private String id;   // no es final: Spring Data le asigna el ObjectId generado al insertar
+    @Field("id")
+    private String codigo;
+    @Field(targetType = FieldType.OBJECT_ID)
+    private String estudioId;
     private final String titulo;
     private final int temporadas;
     private final double calificacion;
@@ -53,6 +59,12 @@ public final class Serie {
     }
 
     public String getId() { return id; }
+    public String getCodigo() { return codigo == null && id != null ? "SER-" + id.toUpperCase(java.util.Locale.ROOT) : codigo; }
+    public Serie conCodigo(String codigo) {
+        this.codigo = Validaciones.texto(codigo, "ID manual").trim().toUpperCase(java.util.Locale.ROOT);
+        return this;
+    }
+    public String getEstudioId() { return estudioId; }
     public String getTitulo() { return titulo; }
     public int getTemporadas() { return temporadas; }
     public double getCalificacion() { return calificacion; }

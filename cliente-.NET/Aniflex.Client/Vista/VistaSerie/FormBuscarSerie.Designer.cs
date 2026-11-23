@@ -1,4 +1,4 @@
-﻿namespace Aniflex.Client
+namespace Aniflex.Client
 {
     partial class FormBuscarSerie
     {
@@ -39,7 +39,6 @@
             txtTitulo = new TextBox();
             txtTemporadas = new TextBox();
             txtCalificacion = new TextBox();
-            textNombreBuscar = new TextBox();
             label5 = new Label();
             dateTimePickerEstreno = new DateTimePicker();
             label6 = new Label();
@@ -56,7 +55,7 @@
             txtIdBuscar.Name = "txtIdBuscar";
             txtIdBuscar.Size = new Size(95, 17);
             txtIdBuscar.TabIndex = 0;
-            txtIdBuscar.Text = "ID (opcional):";
+            txtIdBuscar.Text = "ID manual:";
             // 
             // label1
             // 
@@ -163,15 +162,6 @@
             txtCalificacion.Size = new Size(161, 23);
             txtCalificacion.TabIndex = 10;
             // 
-            // textNombreBuscar
-            // 
-            textNombreBuscar.Location = new Point(166, 83);
-            textNombreBuscar.Margin = new Padding(2);
-            textNombreBuscar.Multiline = true;
-            textNombreBuscar.Name = "textNombreBuscar";
-            textNombreBuscar.Size = new Size(164, 22);
-            textNombreBuscar.TabIndex = 12;
-            // 
             // label5
             // 
             label5.AutoSize = true;
@@ -222,7 +212,7 @@
             label7.Name = "label7";
             label7.Size = new Size(28, 17);
             label7.TabIndex = 27;
-            label7.Text = "ID:";
+            label7.Text = "ObjectId:";
             // 
             // FormBuscarSerie
             // 
@@ -233,7 +223,6 @@
             Controls.Add(label7);
             Controls.Add(dateTimePickerEstreno);
             Controls.Add(label6);
-            Controls.Add(textNombreBuscar);
             Controls.Add(label5);
             Controls.Add(txtCalificacion);
             Controls.Add(txtTemporadas);
@@ -268,7 +257,6 @@
         private TextBox txtTitulo;
         private TextBox txtTemporadas;
         private TextBox txtCalificacion;
-        private TextBox textNombreBuscar;
         private Label label5;
         private DateTimePicker dateTimePickerEstreno;
         private Label label6;

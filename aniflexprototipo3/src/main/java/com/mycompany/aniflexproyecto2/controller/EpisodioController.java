@@ -27,6 +27,11 @@ public class EpisodioController {
     }
 
     @QueryMapping
+    public Episodio buscarEpisodioPorCodigo(@Argument String codigo) {
+        return servicio.buscarPorCodigo(codigo).orElse(null);
+    }
+
+    @QueryMapping
     public Episodio buscarEpisodio(@Argument String serieId, @Argument int noEpisodio) {
         return servicio.buscar(serieId, noEpisodio).orElse(null);
     }

@@ -41,10 +41,13 @@
             txtTitulo = new TextBox();
             label3 = new Label();
             label1 = new Label();
+            txtCodigo = new TextBox();
+            labelIdManual = new Label();
             SuspendLayout();
             // 
             // cmbSerie
             // 
+
             cmbSerie.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbSerie.FormattingEnabled = true;
             cmbSerie.Location = new Point(171, 108);
@@ -88,6 +91,7 @@
             dateTimePickerEstreno.Format = DateTimePickerFormat.Custom;
             dateTimePickerEstreno.Location = new Point(170, 265);
             dateTimePickerEstreno.Name = "dateTimePickerEstreno";
+            dateTimePickerEstreno.CustomFormat = "yyyy-MM-dd HH:mm";
             dateTimePickerEstreno.Size = new Size(181, 23);
             dateTimePickerEstreno.TabIndex = 40;
             // 
@@ -179,9 +183,22 @@
             // 
             // FormAgregarEpisodio
             // 
+            txtCodigo.Name = "txtCodigo";
+            txtCodigo.Font = new Font("Times New Roman", 10F);
+            txtCodigo.Location = new Point(170, 70);
+            txtCodigo.Size = new Size(180, 23);
+            txtCodigo.TabIndex = 2;
+            labelIdManual.Name = "labelIdManual";
+            labelIdManual.Text = "ID manual:";
+            labelIdManual.AutoSize = true;
+            labelIdManual.Location = new Point(24, 74);
+            labelIdManual.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
+            labelIdManual.TabIndex = 1;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(376, 399);
+            Controls.Add(labelIdManual);
+            Controls.Add(txtCodigo);
             Controls.Add(cmbSerie);
             Controls.Add(txtNumEpisodio);
             Controls.Add(label8);
@@ -197,6 +214,7 @@
             Controls.Add(label1);
             Name = "FormAgregarEpisodio";
             Text = "FormAgregarEpisodio";
+            Load += FormAgregarEpisodio_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -216,5 +234,9 @@
         private TextBox txtTitulo;
         private Label label3;
         private Label label1;
+        private TextBox txtCodigo;
+
+        private Label labelIdManual;
+
     }
 }

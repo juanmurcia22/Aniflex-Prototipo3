@@ -1,4 +1,4 @@
-﻿using Aniflex.Client.Controlador;
+using Aniflex.Client.Controlador;
 using Aniflex.Client.Modelo;
 using GraphQL;
 using Newtonsoft.Json;
@@ -12,7 +12,7 @@ namespace Aniflex.Client.Servicios
         private ServicioEpisodio() { }
         public static ServicioEpisodio GetInstance() => _instancia;
         private const string Campos =
-            "id serieId noEpisodio titulo calificacion fechaEmision esEspecial";
+            "id codigo serieId noEpisodio titulo calificacion fechaEmision esEspecial";
 
         public async Task<List<Episodio>> ListarAsync(string serieId = null, string titulo = null)
         {
@@ -42,6 +42,18 @@ namespace Aniflex.Client.Servicios
             var r = await GraphQLConexion.Cliente.SendQueryAsync<BuscarResponse>(request);
             GraphQLConexion.VerificarErrores(r);
             return r.Data?.BuscarEpisodio;
+        }
+
+        public async Task<Episodio> BuscarPorCodigoAsync(string codigo)
+        {
+            var request = new GraphQLRequest
+            {
+                Query = "query($codigo: String!) { buscarEpisodio: buscarEpisodioPorCodigo(codigo: $codigo) { " + Campos + " } }",
+                Variables = new { codigo }
+            };
+            var respuesta = await GraphQLConexion.Cliente.SendQueryAsync<BuscarResponse>(request);
+            GraphQLConexion.VerificarErrores(respuesta);
+            return respuesta.Data?.BuscarEpisodio;
         }
 
         public async Task<Episodio> AdicionarAsync(Episodio e)
@@ -89,6 +101,7 @@ namespace Aniflex.Client.Servicios
         private static object AInput(Episodio e, string? id) => new
         {
             id,
+            codigo = e.Codigo,
             serieId = e.SerieId,
             noEpisodio = e.NoEpisodio,
             titulo = e.Titulo,

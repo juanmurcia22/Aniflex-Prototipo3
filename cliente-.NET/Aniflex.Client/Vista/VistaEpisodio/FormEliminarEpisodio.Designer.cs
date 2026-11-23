@@ -42,8 +42,6 @@
             label2 = new Label();
             btnBuscar = new Button();
             label1 = new Label();
-            cmbSerie = new ComboBox();
-            label8 = new Label();
             txtNumEpisodio = new TextBox();
             label9 = new Label();
             label3 = new Label();
@@ -67,7 +65,8 @@
             label7.Name = "label7";
             label7.Size = new Size(92, 17);
             label7.TabIndex = 57;
-            label7.Text = "Nº Episodio";
+
+            label7.Text = "ID manual:";
             // 
             // textBoxID
             // 
@@ -87,14 +86,16 @@
             label5.Name = "label5";
             label5.Size = new Size(28, 17);
             label5.TabIndex = 55;
-            label5.Text = "ID:";
+
+            label5.Text = "ID manual:";
             // 
             // dateTimePickerEstreno
             // 
             dateTimePickerEstreno.Enabled = false;
-            dateTimePickerEstreno.Format = DateTimePickerFormat.Short;
+            dateTimePickerEstreno.Format = DateTimePickerFormat.Custom;
             dateTimePickerEstreno.Location = new Point(162, 411);
             dateTimePickerEstreno.Name = "dateTimePickerEstreno";
+            dateTimePickerEstreno.CustomFormat = "yyyy-MM-dd HH:mm";
             dateTimePickerEstreno.Size = new Size(163, 23);
             dateTimePickerEstreno.TabIndex = 54;
             // 
@@ -197,27 +198,6 @@
             label1.TabIndex = 42;
             label1.Text = "ELIMINAR EPISODIO";
             // 
-            // cmbSerie
-            // 
-            cmbSerie.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbSerie.FormattingEnabled = true;
-            cmbSerie.Location = new Point(162, 70);
-            cmbSerie.Name = "cmbSerie";
-            cmbSerie.Size = new Size(163, 23);
-            cmbSerie.TabIndex = 60;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(22, 70);
-            label8.Margin = new Padding(2, 0, 2, 0);
-            label8.Name = "label8";
-            label8.Size = new Size(51, 17);
-            label8.TabIndex = 59;
-            label8.Text = "Serie:";
-            label8.Click += label8_Click;
-            // 
             // txtNumEpisodio
             // 
             txtNumEpisodio.Enabled = false;
@@ -268,8 +248,6 @@
             Controls.Add(txtSerie);
             Controls.Add(txtNumEpisodio);
             Controls.Add(label9);
-            Controls.Add(cmbSerie);
-            Controls.Add(label8);
             Controls.Add(txtNumEliminar);
             Controls.Add(label7);
             Controls.Add(textBoxID);
@@ -286,7 +264,6 @@
             Controls.Add(label1);
             Name = "FormEliminarEpisodio";
             Text = "FormEliminarEpisodio";
-            Load += FormEliminarEpisodio_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -307,8 +284,6 @@
         private Label label2;
         private Button btnBuscar;
         private Label label1;
-        private ComboBox cmbSerie;
-        private Label label8;
         private TextBox txtNumEpisodio;
         private Label label9;
         private Label label3;

@@ -1,4 +1,4 @@
-﻿using Aniflex.Client.Controlador;
+using Aniflex.Client.Controlador;
 using Aniflex.Client.Modelo;
 using Aniflex.Client.Servicios;
 using System;
@@ -25,15 +25,16 @@ namespace Aniflex.Client
             try
             {
                 string id = txtId.Text.Trim();
-                string titulo = txtTituloEliminar.Text.Trim();
 
-                if (string.IsNullOrEmpty(id) & string.IsNullOrEmpty(titulo))
+
+                if (string.IsNullOrEmpty(id))
                 {
-                    MessageBox.Show("Por favor ingresa un ID o un titulo.");
+                    MessageBox.Show("Ingresa el ID manual de la serie.");
                     return;
                 }
 
-                Serie p = await _service.BuscarAsync(id,titulo);
+                textBoxID.Clear();
+                Serie p = await _service.BuscarPorCodigoAsync(id);
 
                 if (p != null)
                 {
@@ -83,7 +84,6 @@ namespace Aniflex.Client
                         MessageBox.Show("Serie eliminada correctamente.");
                         SerieObserver.NotificarCambio();
                         txtId.Clear();
-                        txtTituloEliminar.Clear();
                         textBoxID.Clear();
                         txtTemporadas.Clear();
                         txtCalificacion.Clear();

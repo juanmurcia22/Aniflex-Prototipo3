@@ -1,4 +1,4 @@
-﻿namespace Aniflex.Client
+namespace Aniflex.Client
 {
     partial class FormEliminarSerie
     {
@@ -44,8 +44,6 @@
             label6 = new Label();
             textBoxID = new TextBox();
             label5 = new Label();
-            txtTituloEliminar = new TextBox();
-            label7 = new Label();
             SuspendLayout();
             // 
             // btnEliminar
@@ -175,7 +173,7 @@
             txtIdBuscar.Name = "txtIdBuscar";
             txtIdBuscar.Size = new Size(103, 17);
             txtIdBuscar.TabIndex = 23;
-            txtIdBuscar.Text = "ID (opcional):";
+            txtIdBuscar.Text = "ID manual:";
             txtIdBuscar.Click += txtIdBuscar_Click;
             // 
             // dateTimePickerEstreno
@@ -218,34 +216,13 @@
             label5.Name = "label5";
             label5.Size = new Size(28, 17);
             label5.TabIndex = 37;
-            label5.Text = "ID:";
-            // 
-            // txtTituloEliminar
-            // 
-            txtTituloEliminar.Location = new Point(182, 116);
-            txtTituloEliminar.Margin = new Padding(2);
-            txtTituloEliminar.Name = "txtTituloEliminar";
-            txtTituloEliminar.Size = new Size(163, 23);
-            txtTituloEliminar.TabIndex = 40;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.Location = new Point(39, 120);
-            label7.Margin = new Padding(2, 0, 2, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(54, 17);
-            label7.TabIndex = 39;
-            label7.Text = "Titulo:";
+            label5.Text = "ObjectId:";
             // 
             // FormEliminarSerie
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(385, 525);
-            Controls.Add(txtTituloEliminar);
-            Controls.Add(label7);
             Controls.Add(textBoxID);
             Controls.Add(label5);
             Controls.Add(dateTimePickerEstreno);
@@ -289,7 +266,5 @@
         private Label label6;
         private TextBox textBoxID;
         private Label label5;
-        private TextBox txtTituloEliminar;
-        private Label label7;
     }
 }
