@@ -8,7 +8,7 @@ public partial class FormAgregarEstudio : FormDetalleEstudio
     {
         InitializeComponent();
         if (LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
-        Preparar(OperacionEstudio.Agregar, detalle, objectId, codigo, nombre, pais, fecha, series,
+        Preparar(OperacionEstudio.Agregar, detalle, null, codigo, nombre, pais, fecha, series,
             accion: accion, serieCodigo: serieCodigo);
     }
 }

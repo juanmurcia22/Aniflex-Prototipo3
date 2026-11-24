@@ -13,7 +13,7 @@ public class FormDetalleEstudio : Form
     private OperacionEstudio operacion;
     private ServicioEstudio servicio = null!;
     private Control detalle = null!;
-    private TextBox objectId = null!;
+    private TextBox? objectId;
     private TextBox codigo = null!;
     private TextBox nombre = null!;
     private TextBox pais = null!;
@@ -26,7 +26,7 @@ public class FormDetalleEstudio : Form
     private string? idCargado;
     private bool ocupado;
 
-    protected void Preparar(OperacionEstudio operacion, Control detalle, TextBox objectId,
+    protected void Preparar(OperacionEstudio operacion, Control detalle, TextBox? objectId,
         TextBox codigo, TextBox nombre, TextBox pais, DateTimePicker fecha, ListBox series,
         Button? accion = null, TextBox? codigoBusqueda = null, TextBox? serieCodigo = null)
     {
@@ -99,7 +99,7 @@ public class FormDetalleEstudio : Form
         if (estudio is null) throw new InvalidOperationException("No existe un estudio con ese ID manual.");
         foreach (var serie in estudio.Series) seriesSeleccionadas.Add(serie);
         idCargado = estudio.Id;
-        objectId.Text = estudio.Id;
+        if (objectId != null) objectId.Text = estudio.Id;
         codigo.Text = estudio.Codigo;
         nombre.Text = estudio.Nombre;
         pais.Text = estudio.PaisOrigen;
@@ -135,7 +135,7 @@ public class FormDetalleEstudio : Form
         MessageBox.Show($"Estudio {estudio.Codigo} guardado correctamente.");
         if (nuevo)
         {
-            codigo.Clear(); nombre.Clear(); pais.Clear(); objectId.Clear(); seriesSeleccionadas.Clear();
+            codigo.Clear(); nombre.Clear(); pais.Clear(); objectId?.Clear(); seriesSeleccionadas.Clear();
         }
     }
 
