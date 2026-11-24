@@ -37,6 +37,11 @@ public class ManejadorErroresRest {
         return errorMongo();
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ProblemDetail servicioNoDisponible(IllegalStateException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+    }
+
     @ExceptionHandler(MongoException.class)
     public ProblemDetail errorMongo() {
         return ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE,

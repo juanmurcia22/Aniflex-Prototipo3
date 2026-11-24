@@ -1,6 +1,7 @@
 export type Serie = {
   id: string;
   codigo: string;
+  estudioId?: string | null;
   titulo: string;
   temporadas: number;
   calificacion: number;

@@ -24,6 +24,11 @@ public class SerieController {
     }
 
     @QueryMapping
+    public List<Serie> seriesPorIds(@Argument List<String> ids) {
+        return servicio.buscarPorIds(ids);
+    }
+
+    @QueryMapping
     public Serie buscarSeriePorCodigo(@Argument String codigo) {
         return servicio.buscarPorCodigo(codigo).orElse(null);
     }

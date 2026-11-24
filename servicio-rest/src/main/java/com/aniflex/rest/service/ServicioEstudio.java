@@ -3,7 +3,7 @@ package com.aniflex.rest.service;
 import com.aniflex.rest.dto.EstudioInput;
 import com.aniflex.rest.dto.EstudioRespuesta;
 import com.aniflex.rest.model.Estudio;
-import com.aniflex.rest.repository.CatalogoRepository;
+import com.aniflex.rest.integracion.CatalogoGraphQL;
 import com.aniflex.rest.repository.EstudioRepository;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,11 @@ import java.util.Optional;
 @Service
 public class ServicioEstudio {
     private final EstudioRepository estudios;
-    private final CatalogoRepository catalogo;
+    private final CatalogoGraphQL catalogo;
 
-    public ServicioEstudio(EstudioRepository estudios, CatalogoRepository catalogo) {
+    public ServicioEstudio(EstudioRepository estudios, CatalogoGraphQL catalogo) {
         this.estudios = estudios;
         this.catalogo = catalogo;
-        catalogo.reconstruirReferencias(estudios.listar(null, null, null));
     }
 
     public synchronized List<Estudio> listar(String codigo, String paisOrigen, String serieId) {
@@ -30,13 +29,11 @@ public class ServicioEstudio {
         String filtroPais = vacio(paisOrigen) ? null : paisOrigen.trim();
         ObjectId filtroSerie = vacio(serieId) ? null : leerId(serieId);
         var resultados = estudios.listar(filtroCodigo, filtroPais, filtroSerie);
-        for (var estudio : resultados) catalogo.actualizarEstudio(estudio.id(), estudio.seriesIds());
         return resultados;
     }
 
     public synchronized Optional<Estudio> buscar(String codigo) {
         var resultado = estudios.buscarPorCodigo(normalizarCodigo(codigo));
-        resultado.ifPresent(estudio -> catalogo.actualizarEstudio(estudio.id(), estudio.seriesIds()));
         return resultado;
     }
 
@@ -51,7 +48,7 @@ public class ServicioEstudio {
         if (input.seriesIds() == null)
             throw new IllegalArgumentException("La lista de series es obligatoria y puede estar vacía.");
         List<ObjectId> ids = input.seriesIds().stream().map(ServicioEstudio::leerId).distinct().toList();
-        if (!catalogo.existenSeries(ids))
+        if (catalogo.consultarSeries(ids).size() != ids.size())
             throw new IllegalArgumentException("Una de las series seleccionadas ya no existe. Actualiza la lista.");
         var estudio = new Estudio(id == null ? new ObjectId() : leerId(id), codigo,
                 input.nombre().trim(), input.paisOrigen().trim(), input.fechaFundacion(), ids);
@@ -61,28 +58,20 @@ public class ServicioEstudio {
         if (id != null && anterior.isEmpty()) throw new NoSuchElementException("El estudio ya no existe.");
         if (id == null) estudios.insertar(estudio);
         else estudios.actualizar(estudio);
-        try {
-            catalogo.actualizarEstudio(estudio.id(), ids);
-        } catch (RuntimeException ex) {
-            // Revierte una proyección fallida. El arranque y las lecturas reparan una interrupción del proceso.
-            try {
-                if (anterior.isPresent()) estudios.actualizar(anterior.get());
-                else estudios.eliminar(estudio.id());
-                catalogo.actualizarEstudio(estudio.id(), anterior.map(Estudio::seriesIds).orElse(List.of()));
-            } catch (RuntimeException recuperacion) { ex.addSuppressed(recuperacion); }
-            throw ex;
-        }
         return estudio;
     }
 
     public synchronized boolean eliminar(String id) {
         ObjectId objectId = leerId(id);
-        catalogo.actualizarEstudio(objectId, List.of());
         return estudios.eliminar(objectId);
     }
 
     public EstudioRespuesta respuesta(Estudio estudio) {
-        return EstudioRespuesta.desde(estudio, catalogo.consultarSeries(estudio.seriesIds()));
+        var referencias = catalogo.consultarSeries(estudio.seriesIds()).stream()
+                .map(s -> new com.aniflex.rest.dto.SerieReferencia(s.id(), s.codigo(), s.titulo(),
+                        s.temporadas(), s.calificacion(), s.fechaEstreno(), s.enEmision(), estudio.id().toHexString()))
+                .toList();
+        return EstudioRespuesta.desde(estudio, referencias);
     }
 
     public synchronized boolean eliminarSerie(String id) {

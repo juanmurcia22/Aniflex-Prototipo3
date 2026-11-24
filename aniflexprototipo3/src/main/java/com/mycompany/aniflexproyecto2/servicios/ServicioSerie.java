@@ -73,7 +73,7 @@ public class ServicioSerie {
         if (!series.existsById(serie.getId())) {
             throw new IllegalArgumentException("No existe una serie con el ID " + serie.getId());
         }
-        // Actualiza solo los datos editables para conservar estudioId, incluso con asociaciones concurrentes.
+        // Solo escribe atributos propios; la relación con Estudio vive exclusivamente en REST.
         var cambios = new Update().set("codigo", serie.getCodigo()).set("titulo", serie.getTitulo())
                 .set("temporadas", serie.getTemporadas()).set("calificacion", serie.getCalificacion())
                 .set("fechaEstreno", serie.getFechaEstreno()).set("enEmision", serie.isEnEmision());
@@ -92,8 +92,22 @@ public class ServicioSerie {
         }
         // REST coordina las asociaciones y la baja con las escrituras de estudios.
         if (!estudios.eliminarSerie(limpio)) return false;
-        publicador.notificar("Serie", "ELIMINADA", limpio);
         return true;
+    }
+
+    /** Solo lo invoca la integración interna mientras REST bloquea las asociaciones. */
+    public boolean eliminarDelCatalogo(String id) {
+        if (id == null || !org.bson.types.ObjectId.isValid(id))
+            throw new IllegalArgumentException("El identificador interno debe ser un ObjectId válido.");
+        if (!series.existsById(id)) return false;
+        episodios.deleteBySerieId(id);
+        series.deleteById(id);
+        publicador.notificar("Serie", "ELIMINADA", id);
+        return true;
+    }
+
+    public List<Serie> buscarPorIds(List<String> ids) {
+        return series.findAllById(ids);
     }
 
     /** Listado con filtros opcionales: título contiene y calificación mínima. */

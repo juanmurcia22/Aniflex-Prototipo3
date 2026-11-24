@@ -1,6 +1,8 @@
 export type Episodio = {
   id: string;
   codigo: string;
+  serieTitulo?: string | null;
+  serieCalificacion?: number | null;
   serieId: string;
   noEpisodio: number;
   titulo: string;

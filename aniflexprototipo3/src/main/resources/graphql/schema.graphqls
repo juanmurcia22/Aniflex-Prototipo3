@@ -68,6 +68,8 @@ input EpisodioInput {
 }
 
 type Query {
+    "Consulta de catálogo usada por el microservicio REST; sin relaciones remotas."
+    seriesPorIds(ids: [ID!]!): [Serie!]!
     buscarSeriePorCodigo(codigo: String!): Serie
     buscarEpisodioPorCodigo(codigo: String!): Episodio
     buscarEstudio(codigo: String!): Estudio

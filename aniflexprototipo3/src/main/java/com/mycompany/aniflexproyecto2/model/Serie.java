@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.annotation.Transient;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +22,7 @@ public final class Serie {
     private String id;   // no es final: Spring Data le asigna el ObjectId generado al insertar
     @Field("id")
     private String codigo;
-    @Field(targetType = FieldType.OBJECT_ID)
+    @Transient
     private String estudioId;
     private final String titulo;
     private final int temporadas;

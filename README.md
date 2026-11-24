@@ -1,76 +1,67 @@
 # Aniflex
 
-Aplicación de estudios de animación, series y episodios con cliente WinForms,
-servidor GraphQL Java, servicio REST Java y MongoDB local.
+Prototipo local con clientes WinForms y React, GraphQL Java, REST Java y MongoDB Community.
 
-## Iniciar el proyecto en Windows
+## Iniciar en Windows
 
-Se requiere JDK 21 o superior con `JAVA_HOME` configurado, MongoDB Community
-y SDK .NET 10. Los servidores incluyen Maven Wrapper. La primera ejecución
-descarga Maven y las dependencias. Node.js y npm se requieren para usar React.
+Requisitos: MongoDB Community, JDK 21 o superior con `JAVA_HOME`, SDK .NET 10 y,
+para React, Node.js y npm. Los dos servicios incluyen Maven Wrapper.
+Abre una terminal por proceso desde la raíz del repositorio.
 
-Abre las terminales en la raíz del repositorio. Mantén una terminal abierta
-por cada proceso, siguiendo este orden.
+### 1. MongoDB
 
-### 1. MongoDB local
+Inicia MongoDB local. Ambos servicios usan `mongodb://localhost:27017`, pero cada
+uno abre su propia base de datos. Compass permite inspeccionar ambas con esa dirección.
 
-Inicia el servicio MongoDB de Windows. La conexión por defecto es
-`mongodb://localhost:27017` y la base de datos es `Aniflex`.
-Puedes inspeccionarla desde MongoDB Compass con esa misma dirección.
+| Servicio | Base de datos | Colecciones propias |
+| --- | --- | --- |
+| GraphQL | `Aniflex_AB` | `series` y `episodios` |
+| REST | `Aniflex_C` | `estudios`, incluidas sus relaciones `SeriesIds` |
 
-### 2. Servicio REST Java — puerto 8081
+La base antigua `Aniflex` no se modifica ni se migra automáticamente.
+
+### 2. REST Java — puerto 8081
 
 ```powershell
 Set-Location .\servicio-rest
 .\mvnw.cmd spring-boot:run
 ```
 
-Espera a que el registro muestre que el servidor inició en el puerto 8081.
-Comprueba el servicio en otra terminal con esta consulta. Una lista vacía
-es una respuesta válida cuando todavía no hay estudios.
+Espera el mensaje de inicio en el puerto 8081. La consulta siguiente devuelve
+una lista vacía al comenzar, sin necesitar que GraphQL esté encendido todavía:
 
 ```powershell
 Invoke-RestMethod http://localhost:8081/api/estudios/
 ```
 
-### 3. Servidor GraphQL Java — puerto 8080
+### 3. GraphQL Java — puerto 8080
 
-En otra terminal, desde la raíz del repositorio:
+En otra terminal, desde la raíz:
 
 ```powershell
 Set-Location .\aniflexprototipo3
 .\mvnw.cmd spring-boot:run
 ```
 
-Abre [GraphiQL](http://localhost:8080/graphiql) y ejecuta:
+En [GraphiQL](http://localhost:8080/graphiql):
 
 ```graphql
 query {
-  listarSeries { id titulo }
-  listarEstudios { id codigo nombre }
+  listarSeries { id codigo titulo estudioId }
+  listarEpisodios { id codigo titulo }
+  listarEstudios { id codigo nombre series { id codigo titulo } }
 }
 ```
 
-### 4. Cliente WinForms .NET
+### 4. Clientes
 
-En otra terminal, desde la raíz del repositorio:
+WinForms, desde la raíz:
 
 ```powershell
 dotnet run --project .\cliente-.NET\Aniflex.Client\Aniflex.Client.csproj
 ```
 
-El menú Estudios permite listar, agregar, buscar, actualizar y eliminar.
-Los listados se abren vacíos. Pulsa Cargar para obtener todo el contenido,
-o Filtrar para aplicar los criterios. Limpiar borra los filtros y la grilla.
-La búsqueda individual usa el ID manual de cada entidad. Al crear o editar
-un estudio, ingresa el ID manual de una serie y pulsa Añadir serie. La lista
-muestra únicamente las series seleccionadas, con su ID manual y título.
-Desde el listado de series,
-el botón Ver estudios muestra los estudios asociados a la fila seleccionada.
-
-### Cliente React opcional
-
-En otra terminal, desde la raíz del repositorio:
+React, en otra terminal desde la raíz:
 
 ```powershell
 Set-Location .\cliente-react
@@ -78,135 +69,142 @@ npm ci
 npm run dev
 ```
 
-React consume el contrato GraphQL de series y episodios. Los formularios
-de estudios están implementados en WinForms.
+Los dos clientes consumen GraphQL y ofrecen las operaciones de estudios, series
+y episodios. Los listados esperan Cargar o Filtrar. Limpiar vacía los criterios
+y la tabla. Las búsquedas individuales y la selección de series para un estudio
+usan el ID ingresado por el usuario; las referencias internas usan ObjectId.
 
-Para detener los servidores y React, pulsa `Ctrl+C` en sus terminales.
+## Sesiones de prueba y cierre
 
-## Responsabilidades de los servicios
+El modo de prototipo está activado por defecto en ambos servicios mediante
+`aniflex.prototipo.limpiar=true`:
 
-| Componente | Responsabilidad |
-| --- | --- |
-| WinForms | Formularios del CRUD y selección de las relaciones. |
-| GraphQL Java, puerto 8080 | Contrato de los clientes, operaciones de series y episodios y consultas combinadas con estudios. Delega los estudios y las bajas de series a REST. |
-| REST Java, puerto 8081 | CRUD de estudios, validación de códigos y referencias, y bajas de series con sus episodios. |
-| MongoDB local, puerto 27017 | Persistencia de `estudios`, `series` y `episodios` en la base `Aniflex`. |
+- Antes de atender peticiones, cada servicio vacía **solo sus colecciones**.
+- Al detener Spring normalmente con `Ctrl+C`, vuelve a vaciarlas.
+- No se cargan datos de ejemplo automáticamente. Cada ensayo comienza vacío.
+- Los índices y las colecciones se conservan; los documentos de la prueba se eliminan.
 
-Las operaciones de estudios recorren cliente → GraphQL → REST → MongoDB.
-Las consultas y altas/modificaciones de series y episodios recorren
-cliente → GraphQL → MongoDB. La eliminación de series pasa por REST para
-coordinarla con las asociaciones de estudios.
+Para terminar un ensayo, cierra los clientes y pulsa `Ctrl+C` en las terminales
+de **GraphQL y REST**; detén también Vite si usaste React. Cerrar una pestaña o
+WinForms no detiene los microservicios ni elimina datos por sí solo, pues puede
+haber varios clientes conectados.
 
-## Organización del repositorio
+Si se fuerza el cierre del proceso, se interrumpe MongoDB o se apaga el equipo,
+no se puede garantizar la limpieza en ese instante: el siguiente arranque del
+servicio elimina los documentos pendientes antes de aceptar consultas. Para
+comenzar una sesión nueva, reinicia ambos servicios, no solamente uno.
+
+Los datos reales ingresados durante el ensayo también son desechables. Para una
+sesión que deba conservarlos, configura `aniflex.prototipo.limpiar=false` en ambos
+servicios antes de iniciarlos.
+
+## Responsabilidades y comunicación entre microservicios
 
 ```text
-servicio-rest/         API REST Java independiente (Maven / Spring Boot)
-  src/main/java/com/aniflex/rest/
-    config/           Configuración de MongoDB
-    model/            Modelo Estudio
-    dto/              Datos de entrada y respuesta HTTP
-    repository/       Lectura y escritura de documentos MongoDB
-    service/          Validaciones y coordinación de operaciones
-    controller/       Endpoints HTTP
-    exception/        Conversión de errores a respuestas HTTP
-aniflexprototipo3/    Servidor GraphQL Java
-cliente-.NET/         Cliente WinForms
-cliente-react/        Cliente React
+WinForms / React ──GraphQL HTTP──> GraphQL Java ──MongoDB──> Aniflex_AB
+                                      │  ▲
+                                 REST │  │ catálogo GraphQL / baja interna HTTP
+                                      ▼  │
+                                   REST Java ──MongoDB──> Aniflex_C
 ```
 
-REST usa Spring Web MVC y el driver síncrono de MongoDB. Se comunica con
-GraphQL mediante HTTP. Cada servidor tiene su propio proyecto Maven.
+- GraphQL es la entrada de los clientes y administra series y episodios.
+- REST administra estudios y la pertenencia de cada serie a un único estudio.
+- Ningún servicio consulta ni escribe la base del otro. Cada uno usa un solo
+  `MongoClient` de aplicación y su propia configuración de base de datos.
+- REST consulta `seriesPorIds` en GraphQL para validar que las series existen y
+  devolver sus datos actuales. Esa consulta no pide relaciones de estudios,
+  por lo que no genera una llamada circular.
+- GraphQL delega el CRUD de estudios en REST. El campo `Serie.estudioId` se
+  obtiene consultando REST: no se guarda una copia en `Aniflex_AB`.
+- Para borrar una serie, GraphQL pide a REST comprobar su pertenencia. REST
+  mantiene la coordinación de las asociaciones mientras solicita por HTTP la
+  baja local a GraphQL, que elimina la serie y sus episodios en `Aniflex_AB`.
+  Así una asociación no puede intercalarse entre la comprobación y la baja
+  en la instancia REST del prototipo.
 
-## Modelo de Estudio y relaciones
+El endpoint interno de baja exige `X-Aniflex-Interno`. Ambos servicios comparten
+`ANIFLEX_INTEGRACION_CLAVE`; su valor predeterminado sirve para la ejecución local.
+Los servidores escuchan únicamente en loopback. Para trabajar con relaciones y
+bajas de series deben estar encendidos los dos servicios. Un fallo de comunicación
+se informa al cliente; no se interpreta como ausencia de relaciones.
 
-Las tres entidades tienen dos identificadores en MongoDB.
+## Identificadores y relaciones
 
 | Campo BSON | Uso |
 | --- | --- |
-| `_id` (ObjectId) | Identificador interno único generado automáticamente. |
-| `id` (string) | ID manual obligatorio, único dentro de cada colección y editable por el usuario. |
+| `_id` (ObjectId) | Identificador interno generado automáticamente. |
+| `id` (string) | ID ingresado por el usuario, único por colección y editable. |
 
-En el contrato HTTP/GraphQL existente, `id` transporta el ObjectId interno
-y `codigo` transporta el ID manual. Los formularios distinguen ObjectId de
-ID manual. Las búsquedas de series y episodios usan `buscarSeriePorCodigo`
-y `buscarEpisodioPorCodigo`. Los índices únicos de MongoDB impiden repetir
-un ID manual. Los valores se normalizan a mayúsculas.
+El contrato existente conserva `id` para el ObjectId interno y `codigo` para el
+ID ingresado por el usuario. Los valores de `codigo` se normalizan a mayúsculas.
+Las mutaciones y los dos clientes mantienen ese contrato.
 
-La relación es de un estudio a varias series. Una serie puede estar libre
-o asociada a un único estudio. El estudio guarda los ObjectId en `SeriesIds`
-y cada serie asociada guarda `estudioId` como ObjectId. Un índice multikey
-único en `estudios.SeriesIds` impide que otra escritura reclame esa misma
-serie para otro estudio. REST comprueba esa regla antes de guardar.
+`Aniflex_AB.series` y `Aniflex_AB.episodios` guardan sus propios documentos; el
+episodio referencia a su serie por ObjectId. `Aniflex_C.estudios.SeriesIds` guarda
+los ObjectId de las series de GraphQL. El índice multikey único de esa lista
+impide que una serie pertenezca a dos estudios. Esta es una referencia entre
+servicios, no una llave foránea impuesta por MongoDB entre bases.
 
-Al buscar un estudio, REST y GraphQL devuelven tanto `seriesIds` como
-`series`, la lista de objetos Serie referenciados. WinForms muestra estos
-objetos directamente. Retirar una serie del estudio elimina su `estudioId`.
-Borrar un estudio conserva sus series y limpia sus referencias. Para
-borrar una serie, primero hay que retirar su asociación con el estudio.
+Buscar un estudio devuelve `seriesIds` y los objetos `series` referenciados.
+Las series no se duplican en `Aniflex_C`. Retirar o eliminar un estudio libera
+sus referencias y conserva las series. Una serie asociada no puede eliminarse
+hasta retirarla de su estudio.
 
-REST coordina las escrituras de asociaciones en una instancia local.
-El arranque y las consultas reparan las referencias de una operación
-interrumpida a partir de las asociaciones únicas guardadas en el estudio.
-Las ediciones de series actualizan solo sus atributos editables para
-conservar la asociación incluso si se cambia al mismo tiempo.
+## Organización
 
-### Documentos de versiones anteriores
-
-Al iniciar GraphQL, los documentos que carecen de ID manual reciben
-`SER-<ObjectId>` o `EPI-<ObjectId>`, sin cambiar su ObjectId ni sus relaciones.
-Esos IDs de transición se pueden editar desde Actualizar. Los registros
-nuevos requieren el ID ingresado por el usuario. REST conserva el ID manual
-de los estudios anteriores, trasladándolo de `Codigo` al campo BSON `id`,
-y reconstruye `series.estudioId` a partir de sus `SeriesIds`.
-
-Si los datos anteriores vinculan la misma serie a varios estudios, REST
-informa el conflicto al iniciar para que se resuelva la pertenencia de esa
-serie. La migración conserva los documentos y sus ObjectId.
-
-## Configuración local
-
-| Configuración | Archivo o variable |
-| --- | --- |
-| MongoDB de REST | `servicio-rest/src/main/resources/application.properties` |
-| MongoDB de GraphQL y carga de ejemplos | `aniflexprototipo3/src/main/resources/application.properties` |
-| URL REST consumida por GraphQL | `ANIFLEX_REST_URL`, por defecto `http://localhost:8081` |
-| URL GraphQL consumida por WinForms | `ANIFLEX_GRAPHQL_URL`, por defecto `http://localhost:8080/graphql` |
-
-Ambos servidores deben apuntar a la misma base. Para ejecutar con una base
-de pruebas, agrega a cada comando de Maven:
-
-```powershell
-.\mvnw.cmd spring-boot:run '-Dspring-boot.run.arguments=--aniflex.mongodb.database=Aniflex_Pruebas'
+```text
+servicio-rest/
+  src/main/java/com/aniflex/rest/
+    config/        MongoDB y ciclo de limpieza del prototipo
+    model/         Estudio
+    dto/           Entradas y respuestas HTTP
+    repository/    Persistencia de estudios y relaciones en Aniflex_C
+    integracion/   Cliente HTTP del catálogo de GraphQL
+    service/       Validación y coordinación de asociaciones y bajas
+    controller/    Endpoints REST
+    exception/     Errores HTTP
+aniflexprototipo3/  GraphQL, catálogo y persistencia en Aniflex_AB
+cliente-.NET/       WinForms
+cliente-react/      React
 ```
 
-GraphQL carga ejemplos si las colecciones están vacías. Para trabajar con
-tus propios datos, configura `aniflex.datos-iniciales=false` en su archivo
-`application.properties`.
+REST usa Spring Web MVC y el driver síncrono de MongoDB. Cada servidor tiene su
+propio proyecto Maven y no importa clases del otro.
+
+## Configuración
+
+| Configuración | Valor por defecto |
+| --- | --- |
+| MongoDB REST | `servicio-rest/src/main/resources/application.properties`: base `Aniflex_C` |
+| MongoDB GraphQL | `aniflexprototipo3/src/main/resources/application.properties`: base `Aniflex_AB` |
+| REST consumido por GraphQL | `ANIFLEX_REST_URL=http://localhost:8081` |
+| GraphQL consumido por REST | `ANIFLEX_GRAPHQL_URL=http://localhost:8080` (URL base, sin `/graphql`) |
+| GraphQL consumido por WinForms | `ANIFLEX_GRAPHQL_URL=http://localhost:8080/graphql` (en el proceso del cliente) |
+| GraphQL consumido por React | Proxy Vite hacia `http://localhost:8080/graphql` |
+| Limpieza en cada servicio | `aniflex.prototipo.limpiar=true` |
+
+Los parámetros Spring se pueden sobrescribir al ejecutar Maven; usa nombres de
+base distintos para cada servicio. Ejemplo para GraphQL:
+
+```powershell
+.\mvnw.cmd spring-boot:run '-Dspring-boot.run.arguments=--aniflex.mongodb.database=Aniflex_AB_Pruebas'
+```
+
+Para REST utiliza `Aniflex_C_Pruebas` en el comando equivalente.
 
 ## Endpoints REST
 
 | Método y ruta | Operación |
 | --- | --- |
-| `GET /api/estudios/` | Lista y filtra con `codigo`, `paisOrigen` y `serieId`. |
-| `GET /api/estudios/por-codigo/{codigo}` | Busca por código manual. |
-| `POST /api/estudios/` | Crea un estudio y genera su ObjectId. |
-| `PUT /api/estudios/{id}` | Actualiza por ObjectId interno. |
-| `DELETE /api/estudios/{id}` | Elimina el estudio. |
-| `DELETE /api/series/{id}` | Comprueba asociaciones y elimina la serie con sus episodios. |
+| `GET /api/estudios/` | Lista; filtros `codigo`, `paisOrigen`, `serieId` (ObjectId). |
+| `GET /api/estudios/por-codigo/{codigo}` | Busca por ID del usuario. |
+| `POST /api/estudios/` | Crea un estudio. |
+| `PUT /api/estudios/{id}` | Actualiza por ObjectId. |
+| `DELETE /api/estudios/{id}` | Elimina el estudio y sus referencias. |
+| `DELETE /api/series/{id}` | Coordina la baja del catálogo de GraphQL; rechaza series asociadas. |
 
-POST y PUT reciben `codigo`, `nombre`, `paisOrigen`, `fechaFundacion`
-(por ejemplo `2000-01-01`) y `seriesIds` (un arreglo de IDs en texto).
-La respuesta incluye el `id` interno. Los errores usan Problem Details
-con HTTP 400 para datos inválidos, 404 para una actualización de un estudio
-ausente, 409 para código duplicado y 503 para fallos de MongoDB.
-
-Ejemplo para GraphiQL:
-
-```graphql
-mutation {
-  adicionarEstudio(input: {
-    codigo: "EST-001", nombre: "MAPPA", paisOrigen: "Japón",
-    fechaFundacion: "2011-06-14", seriesIds: []
-  }) { id codigo nombre }
-}
-```
+POST y PUT reciben `codigo`, `nombre`, `paisOrigen`, `fechaFundacion` (`yyyy-MM-dd`)
+y `seriesIds`. Las respuestas incluyen el ObjectId `id` y las series referenciadas.
+Los errores usan Problem Details: 400 para datos inválidos, 404 para actualización
+de un estudio ausente, 409 para duplicados y 503 si MongoDB o GraphQL no están disponibles.

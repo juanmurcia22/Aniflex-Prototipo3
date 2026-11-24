@@ -1,11 +1,10 @@
-# Servicio REST Java de estudios
+# Servicio REST Java
 
-API Spring Boot independiente en el puerto 8081, organizada en los paquetes
-`config`, `model`, `dto`, `repository`, `service`, `controller` y `exception`.
-Sus dependencias de producción son Spring Web MVC y el driver síncrono de MongoDB.
+Consulta el [README principal](../README.md) para iniciar todos los procesos localmente.
 
-Los pasos completos de arranque, las responsabilidades, el contrato HTTP
-y la configuración local están en el [README principal](../README.md).
+Este servicio administra estudios y relaciones en `Aniflex_C`. Consulta las series
+por HTTP al servicio GraphQL, dueño de `Aniflex_AB`; nunca abre esa base.
 
-Desde esta carpeta se inicia con `./mvnw.cmd spring-boot:run` en Windows,
-o `sh ./mvnw spring-boot:run` en Linux/macOS.
+Paquetes: `config`, `model`, `dto`, `repository`, `integracion`, `service`,
+`controller` y `exception`. El modo desechable vacía las colecciones propias al
+iniciar y detener Spring; está activado por defecto.

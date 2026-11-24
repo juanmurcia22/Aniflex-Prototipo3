@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useRef, useState } from 'react';
 import { type EntityConfig, type Raw, aFormulario } from '../../entities/EntityConfig';
 import { mensajeDe } from '../../utils/parseo';
 import { EntityForm } from '../components/EntityForm';
@@ -9,35 +9,36 @@ export function ActualizarWindow<T extends { id: string }>({ config }: { config:
   const [encontrado, setEncontrado] = useState<T | null>(null);
   const [valores, setValores] = useState<Raw>({});
   const [msg, setMsg] = useState<Msg | null>(null);
+  const [ocupado, setOcupado] = useState(false);
+  const [resolviendo, setResolviendo] = useState(false);
+  const guardando = useRef(false);
 
   function alBuscar(e: T | null) {
-    setEncontrado(e);
-    setMsg(null);
-    if (e) setValores(aFormulario(config.campos, e));
+    setEncontrado(e); setMsg(null); setResolviendo(false);
+    setValores(e ? aFormulario(config.campos,e) : {});
   }
 
   async function guardar(e: FormEvent) {
     e.preventDefault();
+    if (guardando.current || resolviendo) return;
+    guardando.current = true; setOcupado(true); setMsg(null);
     try {
       const actualizado = await config.controller.actualizar(config.desdeFormulario(valores));
-      setEncontrado(actualizado);
-      setMsg({ tipo: 'ok', texto: `Se actualizó el registro de ${config.nombre} con ID ${actualizado.id}.` });
-    } catch (err) {
-      setMsg({ tipo: 'error', texto: mensajeDe(err) });
-    }
+      setEncontrado(actualizado); setValores(aFormulario(config.campos,actualizado));
+      setMsg({ tipo: 'ok', texto: `Se actualizó ${config.nombre}. ObjectId: ${actualizado.id}.` });
+    } catch (err) { setMsg({ tipo: 'error', texto: mensajeDe(err) }); }
+    finally { guardando.current = false; setOcupado(false); }
   }
 
-  return (
-    <>
-      <SearchPanel config={config} onResultado={alBuscar} />
-      {encontrado && (
-        <form className="formulario" onSubmit={guardar}>
-          <EntityForm campos={config.campos} valores={valores} modoEdicion
-                      onChange={(k, v) => setValores({ ...valores, [k]: v })} />
-          <div className="acciones"><button type="submit">Guardar cambios</button></div>
-          <Mensaje msg={msg} />
-        </form>
-      )}
-    </>
-  );
+  return <>
+    <SearchPanel config={config} onResultado={alBuscar} disabled={ocupado || resolviendo} />
+    {encontrado && <form className="formulario" onSubmit={guardar}>
+      <fieldset disabled={ocupado}>
+        <EntityForm key={encontrado.id} campos={config.campos} valores={valores} modoEdicion onBusyChange={setResolviendo}
+          onChange={(k,v)=>setValores(prev=>({...prev,[k]:v}))} />
+        <div className="acciones"><button type="submit" disabled={resolviendo}>{ocupado ? 'Guardando…' : 'Guardar cambios'}</button></div>
+      </fieldset>
+      <Mensaje msg={msg} />
+    </form>}
+  </>;
 }

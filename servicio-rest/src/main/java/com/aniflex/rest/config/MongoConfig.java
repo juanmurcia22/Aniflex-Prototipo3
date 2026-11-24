@@ -24,7 +24,8 @@ public class MongoConfig {
 
     @Bean
     public MongoDatabase mongoDatabase(MongoClient client,
-                                       @Value("${aniflex.mongodb.database}") String database) {
+                                       @Value("${aniflex.mongodb.database}") String database, LimpiezaPrototipo limpieza) {
+        limpieza.iniciar(client);
         return client.getDatabase(database);
     }
 }

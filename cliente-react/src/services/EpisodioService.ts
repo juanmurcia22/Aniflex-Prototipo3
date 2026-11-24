@@ -1,16 +1,22 @@
 import type { Episodio, EpisodioNuevo } from '../models/Episodio';
+import { SerieService } from './SerieService';
 import { sinVacios } from '../utils/parseo';
 import { GraphQLClient } from './GraphQLClient';
 import type { ICrudService, Params } from './ICrudService';
 
-const CAMPOS = 'id codigo serieId noEpisodio titulo calificacion fechaEmision esEspecial';
+const CAMPOS = 'id codigo serieId noEpisodio titulo calificacion fechaEmision esEspecial serieTitulo serieCalificacion';
 
 export class EpisodioService implements ICrudService<Episodio> {
   constructor(private readonly gql: GraphQLClient = GraphQLClient.getInstance()) {}
 
+  private input(e: EpisodioNuevo & { id?: string }) {
+    const { id, codigo, serieId, noEpisodio, titulo, calificacion, fechaEmision, esEspecial } = e;
+    return { ...(id ? { id } : {}), codigo, serieId, noEpisodio, titulo, calificacion, fechaEmision, esEspecial };
+  }
+
   async adicionar(e: EpisodioNuevo): Promise<Episodio> {
     const d = await this.gql.request<{ adicionarEpisodio: Episodio }>(
-      `mutation($input: EpisodioInput!) { adicionarEpisodio(input: $input) { ${CAMPOS} } }`, { input: e });
+      `mutation($input: EpisodioInput!) { adicionarEpisodio(input: $input) { ${CAMPOS} } }`, { input: this.input(e) });
     return d.adicionarEpisodio;
   }
 
@@ -32,7 +38,7 @@ export class EpisodioService implements ICrudService<Episodio> {
 
   async actualizar(e: Episodio): Promise<Episodio> {
     const d = await this.gql.request<{ actualizarEpisodio: Episodio }>(
-      `mutation($input: EpisodioInput!) { actualizarEpisodio(input: $input) { ${CAMPOS} } }`, { input: e });
+      `mutation($input: EpisodioInput!) { actualizarEpisodio(input: $input) { ${CAMPOS} } }`, { input: this.input(e) });
     return d.actualizarEpisodio;
   }
 
@@ -43,7 +49,13 @@ export class EpisodioService implements ICrudService<Episodio> {
   }
 
   async listar(filtro: Params): Promise<Episodio[]> {
-    const { serieId, titulo } = sinVacios(filtro);
+    const { titulo, serieCodigo } = sinVacios(filtro);
+    let serieId = sinVacios(filtro).serieId;
+    if (serieCodigo) {
+      const serie = await new SerieService(this.gql).buscar({ codigo: serieCodigo });
+      if (!serie) throw new Error('No existe una serie con ese ID.');
+      serieId = serie.id;
+    }
     const d = await this.gql.request<{ listarEpisodios: Episodio[] }>(
       `query($serieId: ID, $titulo: String) {
          listarEpisodios(serieId: $serieId, titulo: $titulo) { ${CAMPOS} } }`, { serieId, titulo });

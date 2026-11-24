@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 // Sin datos iniciales para que el test no dependa de que MongoDB esté encendido.
-@SpringBootTest(properties = {"aniflex.datos-iniciales=false", "aniflex.migrar-ids=false"})
+@SpringBootTest(properties = {"aniflex.datos-iniciales=false", "aniflex.migrar-ids=false", "aniflex.prototipo.limpiar=false"})
 class Aniflexprototipo2ApplicationTests {
 
     @Test

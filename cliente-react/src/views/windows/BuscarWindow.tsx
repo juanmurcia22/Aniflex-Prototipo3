@@ -9,7 +9,7 @@ export function BuscarWindow<T extends { id: string }>({ config }: { config: Ent
   return (
     <>
       <SearchPanel config={config} onResultado={setEncontrado} />
-      {encontrado && <EntityDetail campos={config.campos} entidad={encontrado} />}
+      {encontrado && <><EntityDetail campos={config.campos} entidad={encontrado} />{config.relacion?.(encontrado)}</>}
     </>
   );
 }

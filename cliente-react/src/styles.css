@@ -43,3 +43,22 @@ th, td { border: 1px solid #d5dbe8; padding: 5px 8px; text-align: left; white-sp
 th { background: #eef1f6; }
 td.vacio { text-align: center; color: #6b7488; }
 .acerca h3 { margin-top: 0; }
+
+input[type='date'] { padding: 6px 8px; border: 1px solid #b7c0d3; border-radius: 5px; font: inherit; }
+button.principal { padding: 7px 16px; border: 0; border-radius: 5px; cursor: pointer; font: inherit; color: #fff; background: #3b5bdb; }
+button:disabled { opacity: .6; cursor: wait; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.filtros-campos { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; }
+.busqueda-referencia { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; }
+.referencia, .series-estudio { display: grid; gap: 8px; }
+.referencia-elegida { padding: 8px; border-radius: 5px; background: #eef1f6; }
+small { display: block; color: #6b7488; font-size: 12px; overflow-wrap: anywhere; }
+.series-seleccionadas { list-style: none; padding: 0; margin: 0; }
+.series-seleccionadas li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #d5dbe8; }
+.series-estudio { padding: 10px; background: #f5f7fb; border: 1px solid #d5dbe8; border-radius: 5px; }
+.estado-listado, .vacio { color: #6b7488; font-size: 14px; }
+.detalle dd { min-width: 0; overflow-wrap: anywhere; }
+.formulario > fieldset { display: grid; gap: 8px; }
+
+.estudio-relacionado { white-space: normal; min-width: 150px; }
+.estudio-relacionado h4 { margin-bottom: 4px; }

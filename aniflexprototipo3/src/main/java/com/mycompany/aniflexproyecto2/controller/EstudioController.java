@@ -43,6 +43,11 @@ public class EstudioController {
         return estudio.seriesIds().stream().flatMap(id -> series.buscarPorId(id).stream()).toList();
     }
 
+    @SchemaMapping(typeName = "Serie", field = "estudioId")
+    public String estudioId(Serie serie) {
+        return estudios.listar(null, null, serie.getId()).stream().map(Estudio::id).findFirst().orElse(null);
+    }
+
     @SchemaMapping(typeName = "Serie", field = "estudios")
     public List<Estudio> estudios(Serie serie) { return estudios.listar(null, null, serie.getId()); }
 }
