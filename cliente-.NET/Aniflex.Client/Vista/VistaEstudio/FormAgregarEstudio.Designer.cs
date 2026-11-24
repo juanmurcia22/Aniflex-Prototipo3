@@ -16,8 +16,6 @@ partial class FormAgregarEstudio
     {
         labelTitulo = new Label();
         detalle = new Panel();
-        labelObjectid = new Label();
-        objectId = new TextBox();
         labelCodigo = new Label();
         codigo = new TextBox();
         labelNombre = new Label();
@@ -51,8 +49,6 @@ partial class FormAgregarEstudio
         // detalle
         // 
         detalle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        detalle.Controls.Add(labelObjectid);
-        detalle.Controls.Add(objectId);
         detalle.Controls.Add(labelCodigo);
         detalle.Controls.Add(codigo);
         detalle.Controls.Add(labelNombre);
@@ -72,28 +68,6 @@ partial class FormAgregarEstudio
         detalle.Name = "detalle";
         detalle.Size = new Size(1000, 650);
         detalle.TabIndex = 1;
-        // 
-        // labelObjectid
-        // 
-        labelObjectid.AutoSize = true;
-        labelObjectid.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
-        labelObjectid.Location = new Point(46, 7);
-        labelObjectid.Margin = new Padding(4, 0, 4, 0);
-        labelObjectid.Name = "labelObjectid";
-        labelObjectid.Size = new Size(93, 25);
-        labelObjectid.TabIndex = 0;
-        labelObjectid.Text = "ObjectId";
-        // 
-        // objectId
-        // 
-        objectId.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-        objectId.Font = new Font("Times New Roman", 10F);
-        objectId.Location = new Point(314, 0);
-        objectId.Margin = new Padding(4, 5, 4, 5);
-        objectId.Name = "objectId";
-        objectId.ReadOnly = true;
-        objectId.Size = new Size(627, 30);
-        objectId.TabIndex = 1;
         // 
         // labelCodigo
         // 
@@ -281,8 +255,6 @@ partial class FormAgregarEstudio
     #endregion
     private Label labelTitulo;
     private Panel detalle;
-    private Label labelObjectid;
-    private TextBox objectId;
     private Label labelCodigo;
     private TextBox codigo;
     private Label labelNombre;
