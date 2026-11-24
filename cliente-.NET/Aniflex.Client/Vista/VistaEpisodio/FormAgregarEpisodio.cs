@@ -21,10 +21,6 @@ namespace Aniflex.Client.Vista.VistaEpisodio
         public FormAgregarEpisodio()
         {
             InitializeComponent();
-            dateTimePickerEstreno.Format = DateTimePickerFormat.Custom;
-            dateTimePickerEstreno.CustomFormat = "yyyy-MM-dd HH:mm";
-            cmbSerie.DropDownStyle = ComboBoxStyle.DropDownList;
-            Load += FormAgregarEpisodio_Load;
         }
 
         private async void FormAgregarEpisodio_Load(object sender, EventArgs e)
@@ -51,6 +47,7 @@ namespace Aniflex.Client.Vista.VistaEpisodio
 
         private void LimpiarCampos()
         {
+            txtCodigo.Clear();
             txtNumEpisodio.Clear();
             txtTitulo.Clear();
             txtCalificacion.Clear();
@@ -62,6 +59,7 @@ namespace Aniflex.Client.Vista.VistaEpisodio
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(txtCodigo.Text)) { MessageBox.Show("Ingresa el ID manual."); return; }
                 if (cmbSerie.SelectedValue is not string serieId)
                 {
                     MessageBox.Show("Debes seleccionar una serie.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -100,6 +98,7 @@ namespace Aniflex.Client.Vista.VistaEpisodio
                 {
                     SerieId = serieId,
                     NoEpisodio = noEpisodio,
+                    Codigo = txtCodigo.Text.Trim(),
                     Titulo = titulo,
                     Calificacion = calificacion,
                     FechaEmision = fechaEmision,

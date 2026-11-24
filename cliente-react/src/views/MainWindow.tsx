@@ -1,6 +1,7 @@
 import { type ReactElement, useRef, useState } from 'react';
 import { APP_NOMBRE } from '../constants/appInfo';
 import type { AnyConfig } from '../entities/EntityConfig';
+import { estudioConfig } from '../entities/estudioConfig';
 import { episodioConfig } from '../entities/episodioConfig';
 import { serieConfig } from '../entities/serieConfig';
 import { MenuBar, type MenuDef } from './MenuBar';
@@ -22,7 +23,7 @@ const VENTANAS: Record<Caso, (p: { config: AnyConfig }) => ReactElement> = {
   Eliminar: EliminarWindow,
 };
 
-const ENTIDADES: AnyConfig[] = [serieConfig, episodioConfig];
+const ENTIDADES: AnyConfig[] = [estudioConfig, serieConfig, episodioConfig];
 
 interface Abierta {
   clave: string;

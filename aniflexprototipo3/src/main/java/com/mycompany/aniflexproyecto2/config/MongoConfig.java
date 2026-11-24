@@ -5,6 +5,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -13,16 +14,19 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Conexion a MongoDB (misma estructura del ejemplo del profe: AbstractMongoClientConfiguration).
- * Base de datos: "Aniflex"; colecciones: "series" (maestro) y "episodios" (detalle).
+ * Base de datos: "Aniflex_AB"; colecciones: "series" (maestro) y "episodios" (detalle).
  */
 @Configuration
 @EnableMongoRepositories(basePackages = "com.mycompany.aniflexproyecto2.repository")
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
+    @Autowired
+    private LimpiezaPrototipo limpieza;
+
     @Value("${aniflex.mongodb.uri:mongodb://localhost:27017}")
     private String uri;
 
-    @Value("${aniflex.mongodb.database:Aniflex}")
+    @Value("${aniflex.mongodb.database:Aniflex_AB}")
     private String baseDeDatos;
 
     @Value("${aniflex.mongodb.timeout-segundos:3}")
@@ -40,6 +44,8 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
                 // Si Mongo esta apagado, el cliente recibe un mensaje rapido en vez de esperar 30 s.
                 .applyToClusterSettings(b -> b.serverSelectionTimeout(timeoutSegundos, TimeUnit.SECONDS))
                 .build();
-        return MongoClients.create(settings);
+        var client = MongoClients.create(settings);
+        try { limpieza.iniciar(client); return client; }
+        catch (RuntimeException ex) { client.close(); throw ex; }
     }
 }

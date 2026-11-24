@@ -31,18 +31,18 @@ public class DatosIniciales implements CommandLineRunner {
             return;
         }
         try {
-            // Los ids (ObjectId) los genera MongoDB; los episodios se enlazan a la serie por su titulo.
+            // Los ejemplos resuelven la serie por ID manual y guardan su ObjectId.
             if (series.count() == 0) {
-                series.insert(new Serie("Attack on Titan", 4, 9.1, LocalDateTime.of(2013, 4, 7, 9, 0), false));
-                series.insert(new Serie("Frieren", 1, 9.3, LocalDateTime.of(2023, 9, 29, 21, 0), true));
+                series.insert(new Serie("Attack on Titan", 4, 9.1, LocalDateTime.of(2013, 4, 7, 9, 0), false).conCodigo("SER-DEMO-AOT"));
+                series.insert(new Serie("Frieren", 1, 9.3, LocalDateTime.of(2023, 9, 29, 21, 0), true).conCodigo("SER-DEMO-FRIEREN"));
             }
             if (episodios.count() == 0) {
-                series.findByTituloIgnoreCase("Attack on Titan").ifPresent(s ->
+                series.findByCodigo("SER-DEMO-AOT").ifPresent(s ->
                         episodios.insert(new Episodio(s.getId(), 1, "A ti, dentro de 2000 años", 8.7,
-                                LocalDateTime.of(2013, 4, 7, 9, 0), false)));
-                series.findByTituloIgnoreCase("Frieren").ifPresent(s ->
+                                LocalDateTime.of(2013, 4, 7, 9, 0), false).conCodigo("EPI-DEMO-AOT-1")));
+                series.findByCodigo("SER-DEMO-FRIEREN").ifPresent(s ->
                         episodios.insert(new Episodio(s.getId(), 1, "El final de la aventura", 9.0,
-                                LocalDateTime.of(2023, 9, 29, 21, 0), true)));
+                                LocalDateTime.of(2023, 9, 29, 21, 0), true).conCodigo("EPI-DEMO-FRIEREN-1")));
             }
         } catch (RuntimeException e) {
             // Mongo apagado: el servidor sigue arriba y cada consulta devolverá un mensaje claro al cliente.

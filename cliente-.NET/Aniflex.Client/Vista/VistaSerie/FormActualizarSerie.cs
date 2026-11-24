@@ -24,20 +24,22 @@ namespace Aniflex.Client
         {
             try
             {
-                string id = txtId.Text.Trim();
-                string titulo = txtTituloBuscar.Text.Trim();
+                string id = txtCodigo.Text.Trim();
 
-                if (string.IsNullOrEmpty(id) & string.IsNullOrEmpty(titulo))
+
+                if (string.IsNullOrEmpty(id))
                 {
-                    MessageBox.Show("Por favor ingresa un ID o un titulo.");
+                    MessageBox.Show("Ingresa el ID manual de la serie.");
                     return;
                 }
 
-                Serie p = await _service.BuscarAsync(id, titulo);
+                textBoxID.Clear();
+                Serie p = await _service.BuscarPorCodigoAsync(id);
 
                 if (p != null)
                 {
                     textBoxID.Text = p.Id;
+                    txtCodigo.Text = p.Codigo;
                     textBoxID.Enabled = false;
                     txtTitulo.Text = p.Titulo;
                     txtTemporadas.Text = p.Temporadas.ToString();
@@ -76,6 +78,7 @@ namespace Aniflex.Client
                 Serie pEditada = new Serie
                 {
                     Id = id,
+                    Codigo = txtCodigo.Text.Trim(),
                     Titulo = txtTitulo.Text.Trim(),
                     Temporadas = Temporadas,
                     Calificacion = calificacion,

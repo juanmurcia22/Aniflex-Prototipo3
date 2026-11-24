@@ -1,14 +1,15 @@
-import type { FieldDef } from '../../entities/EntityConfig';
+import type { FieldDef, ValorCampo } from '../../entities/EntityConfig';
 import { SerieSelect } from './SerieSelect';
 
 interface Props {
   campo: FieldDef;
-  valor: string | boolean;
-  onChange: (v: string | boolean) => void;
+  valor: ValorCampo;
+  onChange: (v: ValorCampo) => void;
   soloLectura?: boolean;
+  onBusyChange?: (busy: boolean) => void;
 }
 
-export function CampoInput({ campo, valor, onChange, soloLectura }: Props) {
+export function CampoInput({ campo, valor, onChange, soloLectura, onBusyChange }: Props) {
   if (campo.tipo === 'boolean') {
     return (
       <label className="campo check">
@@ -20,13 +21,13 @@ export function CampoInput({ campo, valor, onChange, soloLectura }: Props) {
   }
   if (campo.tipo === 'serieRef') {
     return (
-      <label className="campo">
+      <div className="campo">
         <span>{campo.label}</span>
-        <SerieSelect valor={String(valor)} onChange={onChange} disabled={soloLectura} />
-      </label>
+        <SerieSelect valor={String(valor)} onChange={onChange} disabled={soloLectura} onBusyChange={onBusyChange} />
+      </div>
     );
   }
-  const type = campo.tipo === 'datetime' ? 'datetime-local' : campo.tipo === 'text' ? 'text' : 'number';
+  const type = campo.tipo === 'date' ? 'date' : campo.tipo === 'datetime' ? 'datetime-local' : campo.tipo === 'text' ? 'text' : 'number';
   return (
     <label className="campo">
       <span>{campo.label}</span>

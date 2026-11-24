@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +7,7 @@ namespace Aniflex.Client.Modelo
 {
     public class Episodio
     {
+        [JsonProperty("codigo")] public string Codigo { get; set; } = "";
         [JsonProperty("id")] public string Id { get; set; }
         [JsonProperty("serieId")] public string SerieId { get; set; }
         [JsonProperty("noEpisodio")] public int NoEpisodio { get; set; }

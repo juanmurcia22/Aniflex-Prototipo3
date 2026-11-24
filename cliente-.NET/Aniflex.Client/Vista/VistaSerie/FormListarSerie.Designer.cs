@@ -1,4 +1,4 @@
-﻿namespace Aniflex.Client
+namespace Aniflex.Client
 {
     partial class FormListarSerie
     {
@@ -38,6 +38,7 @@
             buttonFiltrar = new Button();
             buttonLimpiar = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvSeries).BeginInit();
+            verEstudios = new Button();
             SuspendLayout();
             // 
             // dgvSeries
@@ -56,9 +57,10 @@
             btnCargar.Location = new Point(404, 41);
             btnCargar.Margin = new Padding(2);
             btnCargar.Name = "btnCargar";
+            btnCargar.Click += btnCargar_Click;
             btnCargar.Size = new Size(135, 27);
             btnCargar.TabIndex = 1;
-            btnCargar.Text = "Cargar Series";
+            btnCargar.Text = "Cargar";
             btnCargar.UseVisualStyleBackColor = true;
             btnCargar.Click += FormListar_Load;
             // 
@@ -137,9 +139,16 @@
             // 
             // FormListarSerie
             // 
+            verEstudios.Name = "verEstudios";
+            verEstudios.Text = "Ver estudios";
+            verEstudios.Location = new Point(14, 106);
+            verEstudios.Size = new Size(130, 30);
+            verEstudios.Font = new Font("Sitka Banner", 10F);
+            verEstudios.Click += verEstudios_Click;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(553, 375);
+            Controls.Add(verEstudios);
             Controls.Add(buttonLimpiar);
             Controls.Add(buttonFiltrar);
             Controls.Add(label2);
@@ -170,5 +179,7 @@
         private Label label2;
         private Button buttonFiltrar;
         private Button buttonLimpiar;
+        private Button verEstudios;
+
     }
 }

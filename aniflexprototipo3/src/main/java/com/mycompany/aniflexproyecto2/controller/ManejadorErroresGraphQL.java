@@ -17,11 +17,19 @@ public class ManejadorErroresGraphQL extends DataFetcherExceptionResolverAdapter
 
     @Override
     protected GraphQLError resolveToSingleError(Throwable ex, DataFetchingEnvironment env) {
+        if (ex instanceof org.springframework.dao.DuplicateKeyException) {
+            return GraphqlErrorBuilder.newError(env).errorType(ErrorType.BAD_REQUEST)
+                    .message("Ya existe un registro con ese ID manual.").build();
+        }
         if (ex instanceof IllegalArgumentException) {
             return GraphqlErrorBuilder.newError(env)
                     .errorType(ErrorType.BAD_REQUEST)
                     .message(ex.getMessage())
                     .build();
+        }
+        if (ex instanceof IllegalStateException) {
+            return GraphqlErrorBuilder.newError(env).errorType(ErrorType.INTERNAL_ERROR)
+                    .message(ex.getMessage()).build();
         }
         if (ex instanceof DataAccessException || ex instanceof com.mongodb.MongoException) {
             return GraphqlErrorBuilder.newError(env)

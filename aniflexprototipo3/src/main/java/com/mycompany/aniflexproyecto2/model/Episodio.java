@@ -23,6 +23,8 @@ public final class Episodio {
     @Field(targetType = FieldType.OBJECT_ID)   // se guarda como ObjectId, igual que el _id de "series"
     private final String serieId;
     private final int noEpisodio;
+    @Field("id")
+    private String codigo;
     private final String titulo;
     private final double calificacion;
     private final LocalDateTime fechaEmision;
@@ -59,6 +61,12 @@ public final class Episodio {
     }
 
     public String getId() { return id; }
+    public String getCodigo() { return codigo == null && id != null ? "EPI-" + id.toUpperCase(java.util.Locale.ROOT) : codigo; }
+    public Episodio conCodigo(String codigo) {
+        this.codigo = Validaciones.texto(codigo, "ID manual").trim().toUpperCase(java.util.Locale.ROOT);
+        return this;
+    }
+
     public String getSerieId() { return serieId; }
     public int getNoEpisodio() { return noEpisodio; }
     public String getTitulo() { return titulo; }

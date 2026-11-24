@@ -1,0 +1,14 @@
+using System.ComponentModel;
+
+namespace Aniflex.Client.Vista.VistaEstudio;
+
+public partial class FormActualizarEstudio : FormDetalleEstudio
+{
+    public FormActualizarEstudio()
+    {
+        InitializeComponent();
+        if (LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
+        Preparar(OperacionEstudio.Actualizar, detalle, objectId, codigo, nombre, pais, fecha, series,
+            accion: accion, codigoBusqueda: codigoBusqueda, serieCodigo: serieCodigo);
+    }
+}
